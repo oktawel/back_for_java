@@ -15,6 +15,16 @@
 
         <mapping class="org.example.models.Role"/>
         <mapping class="org.example.models.Users"/>
+        <mapping class="org.example.models.Admin"/>
+        <mapping class="org.example.models.Lecturer"/>
+        <mapping class="org.example.models.Student"/>
+        <mapping class="org.example.models.Grooup"/>
+        <mapping class="org.example.models.Subject"/>
+        <mapping class="org.example.models.Subjects"/>
+        <mapping class="org.example.models.Test"/>
+        <mapping class="org.example.models.Question"/>
+        <mapping class="org.example.models.TypeQuestion"/>
+
         <!-- Create tables automatically -->
         <!--property name="hibernate.hbm2ddl.auto">create</property-->
     </session-factory>

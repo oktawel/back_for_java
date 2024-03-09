@@ -1,15 +1,26 @@
 package org.example.models;
 
 import java.util.Date;
+
+import jakarta.persistence.*;
 import org.example.models.*;
-
+@Entity
+@Table(name = "Student")
 public class Student{
-
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "User_id", nullable = false)
 	private Users user;
+	@Column(name = "name", nullable = false)
 	private String name;
+	@Column(name = "surname", nullable = false)
 	private String surname;
+	@Column(name = "birthDate", nullable = false)
 	private Date birthDate;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "groop_id", nullable = false)
 	private Grooup group;
 
 	// Геттер для поля id

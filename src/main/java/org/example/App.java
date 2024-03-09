@@ -1,31 +1,37 @@
 package org.example;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 import org.example.models.*;
+import org.example.DAO.*;
+
+import java.util.List;
 
 public class App 
 {
 
+
     public static void main( String[] args )
     {
-        System.out.println( "Hello World!" );
+        UserDAO userDAO = new UserDAOImpl();
+        RoleDAO roleDAO = new RoleDAOImpl();
+
+        /**Users us = new Users();
+        us.setLogin("stu-ist121");
+        us.setPassword("123321");
+        Role role = roleDAO.getById(1L);
+        userDAO.add(us, role);**/
 
 
-        try (Session session = HibernateUtil.getSession()) {
-            session.beginTransaction();
+        Users us2 = userDAO.getById(2L);
+        us2.setPassword("525");
+        userDAO.update(us2);
 
-            Users user = session.get(Users.class, 1L);
+        userDAO.delete(4L);
+
+        List<Users> users = userDAO.getAll();
+        for (Users user: users)
+        {
             System.out.println(user.getLogin());
-            System.out.println(user.getRole().getName());
-
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-
-        System.out.println( "Hello World!" );
     }
 }
 

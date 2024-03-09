@@ -1,13 +1,21 @@
 package org.example.models;
 
+import jakarta.persistence.*;
 import org.example.models.*;
-public class Lecturer{
 
+@Entity
+@Table(name = "Lector")
+public class Lecturer{
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "User_id", nullable = false)
 	private Users user;
+	@Column(name = "name", nullable = false)
 	private String name;
+	@Column(name = "surname", nullable = false)
 	private String surname;
-	private Subject subject;
 
 	// Геттер для поля id
 	public long getId() {
@@ -49,13 +57,4 @@ public class Lecturer{
 		this.surname = surname;
 	}
 
-	// Геттер для поля subject
-	public Subject getSubject() {
-		return subject;
-	}
-
-	// Сеттер для поля subject
-	public void setSubject(Subject subject) {
-		this.subject = subject;
-	}
 }

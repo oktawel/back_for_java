@@ -1,13 +1,22 @@
 package org.example.models;
 
+import jakarta.persistence.*;
 import org.example.models.*;
-
+@Entity
+@Table(name = "Admin")
 public class Question{
-
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+	@Column(name = "text", nullable = false)
 	private String text;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "test_id", nullable = false)
 	private Test test;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "type_id", nullable = false)
 	private TypeQuestion type;
+	@Column(name = "cost", nullable = false)
 	private int cost;
 
 	// Геттер для поля id

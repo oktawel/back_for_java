@@ -1,10 +1,14 @@
 package org.example.models;
 
+import jakarta.persistence.*;
 import org.example.models.*;
-
+@Entity
+@Table(name = "TypeQuestion ")
 public class TypeQuestion{
-
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+	@Column(name = "text", nullable = false)
 	private String text;
 
 	// Геттер для поля id

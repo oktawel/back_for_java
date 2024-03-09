@@ -1,11 +1,18 @@
 package org.example.models;
 
+import jakarta.persistence.*;
 import org.example.models.*;
-
+@Entity
+@Table(name = "Subjects")
 public class Subjects{
-
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "subject_id", nullable = false)
 	private Subject subject;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "groop_id", nullable = false)
 	private Grooup group;
 
 	// Геттер для поля id
