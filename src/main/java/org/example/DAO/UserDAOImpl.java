@@ -28,11 +28,10 @@ public class UserDAOImpl implements UserDAO{
         }
     }
     @Override
-    public boolean add(Users user, Role role){
+    public boolean add(Users user){
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSession()) {
             transaction = session.beginTransaction();
-            user.setRole(role);
             session.save(user);
             transaction.commit();
             return true;

@@ -8,7 +8,7 @@ import java.util.List;
 public interface UserDAO {
     Users getById(Long id);
     List<Users> getAll();
-    boolean add(Users user, Role role);
+    boolean add(Users user);
     boolean update(Users user);
     boolean delete(Long id);
 }

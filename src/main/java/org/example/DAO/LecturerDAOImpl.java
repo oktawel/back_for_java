@@ -1,53 +1,38 @@
 package org.example.DAO;
 
-import org.example.models.Role;
-
+import org.example.HibernateUtil.HibernateUtil;
+import org.example.models.Lecturer;
+import org.example.models.Users;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.example.HibernateUtil.HibernateUtil;
 
-import jakarta.persistence.Query;
 import java.util.List;
 
-public class RoleDAOImpl implements RoleDAO {
+public class LecturerDAOImpl implements LecturerDAO{
     @Override
-    public Role getById(Long id) {
+    public Lecturer getById(Long id){
         try (Session session = HibernateUtil.getSession()) {
-            return session.get(Role.class, id);
+            return session.get(Lecturer.class, id);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
-
     @Override
-    public Role getByName(String name) {
+    public List<Lecturer> getAll(){
         try (Session session = HibernateUtil.getSession()) {
-            Query query = session.createQuery("FROM Role WHERE name = :name", Role.class);
-            query.setParameter("name", name);
-            return (Role) query.getSingleResult();
+            return session.createQuery("FROM Lector", Lecturer.class).getResultList();
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
-
     @Override
-    public List<Role> getAll() {
-        try (Session session = HibernateUtil.getSession()) {
-            return session.createQuery("FROM Role", Role.class).getResultList();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    @Override
-    public boolean add(Role role) {
+    public boolean add(Lecturer lecturer){
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSession()) {
             transaction = session.beginTransaction();
-            session.save(role);
+            session.save(lecturer);
             transaction.commit();
             return true;
         } catch (Exception e) {
@@ -58,13 +43,12 @@ public class RoleDAOImpl implements RoleDAO {
             return false;
         }
     }
-
     @Override
-    public boolean update(Role role) {
+    public boolean update(Lecturer lecturer){
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSession()) {
             transaction = session.beginTransaction();
-            session.update(role);
+            session.update(lecturer);
             transaction.commit();
             return true;
         } catch (Exception e) {
@@ -75,19 +59,14 @@ public class RoleDAOImpl implements RoleDAO {
             return false;
         }
     }
-
     @Override
-    public boolean delete(Long id) {
+    public boolean delete(Long id){
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSession()) {
             transaction = session.beginTransaction();
-            Role role = getById(id);
-            if (role != null) {
-                session.delete(role);
-                transaction.commit();
-                return true;
-            }
-            return false;
+            session.delete(getById(id));
+            transaction.commit();
+            return true;
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
@@ -96,5 +75,4 @@ public class RoleDAOImpl implements RoleDAO {
             return false;
         }
     }
-
 }
