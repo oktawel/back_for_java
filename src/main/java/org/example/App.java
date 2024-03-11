@@ -5,48 +5,39 @@ import org.example.DAO.*;
 import org.example.models.forAdmin.*;
 import org.example.services.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class App 
 {
 
 
-    public static void main( String[] args )
-    {
-        UserDAO userDAO = new UserDAOImpl();
-        RoleDAO roleDAO = new RoleDAOImpl();
-
-        AdminServiceImpl r = new AdminServiceImpl();
-
-        AddFormLecturer form = new AddFormLecturer();
-        form.setName("Иван");
-        form.setSurname("Большев");
+    public static void main( String[] args ) throws ParseException {
+        AdminService r = new AdminServiceImpl();
 
 
-        r.addNewLecturer(form);
+//        AddFormLecturer form = new AddFormLecturer();
+//        form.setName("Иван");
+//        form.setSurname("Большев");
+//        r.addNewLecturer(form);
 
+//        AddFormGrooup form = new AddFormGrooup();
+//        form.setName("ИСТ-120");
+//        r.addNewGrooup(form);
 
-
-
-
-//        /**Users us = new Users();
-//        us.setLogin("stu-ist121");
-//        us.setPassword("123321");
-//        Role role = roleDAO.getById(1L);
-//        userDAO.add(us, role);**/
+//        AddFormStudent form = new AddFormStudent();
+//        form.setName("Дмитрий");
+//        form.setSurname("Зубарев");
+//        form.setGroupId(1L);
+//        Date date = new Date();
+//        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+//        date = dateFormat.parse("12/02/2003");
+//        form.setBirthDate(date);
 //
-//
-//        Users us2 = userDAO.getById(2L);
-//        us2.setPassword("525");
-//        userDAO.update(us2);
-//
-//        userDAO.delete(4L);
-//
-//        List<Users> users = userDAO.getAll();
-//        for (Users user: users)
-//        {
-//            System.out.println(user.getLogin());
-//        }
+//        r.addNewStudent(form);
+
     }
 }
 

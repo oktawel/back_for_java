@@ -1,11 +1,12 @@
 package org.example.services;
 
 import org.example.DAO.*;
-import org.example.models.Role;
-import org.example.models.Users;
-import org.example.models.Lecturer;
+import org.example.models.*;
+import org.example.models.forAdmin.AddFormGrooup;
 import org.example.models.forAdmin.AddFormLecturer;
+import org.example.models.forAdmin.AddFormStudent;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -13,6 +14,8 @@ public class AdminServiceImpl implements AdminService{
 
     UserDAO userDAO = new UserDAOImpl();
     RoleDAO roleDAO = new RoleDAOImpl();
+    GroupDAO groupDAO = new GroupDAOImpl();
+    StudentDAO studentDAO = new StudentDAOImpl();
     LecturerDAO lecturerDAO = new LecturerDAOImpl();
 
     @Override
@@ -24,7 +27,7 @@ public class AdminServiceImpl implements AdminService{
         String name = form.getName();
         String surname = form.getSurname();
         if (login == null){login = generateLogin(); }
-        if (password == null){password = generateLogin(); }
+        if (password == null){password = generatePassword(); }
 
         Role role = roleDAO.getByName("Lector");
 
@@ -38,6 +41,53 @@ public class AdminServiceImpl implements AdminService{
             lecturer.setSurname(surname);
             lecturer.setUser(user);
             if(lecturerDAO.add(lecturer)){
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public boolean addNewGrooup(AddFormGrooup form){
+        boolean result = false;
+        Grooup group = new Grooup();
+
+        group.setName(form.getName());
+        if (groupDAO.add(group)){
+            result = true;
+        }
+        return result;
+    }
+
+    @Override
+    public boolean addNewStudent(AddFormStudent form){
+        boolean result = false;
+
+        String login = form.getLogin();
+        String password = form.getPassword();
+        String name = form.getName();
+        String surname = form.getSurname();
+        Date birthDate = form.getBirthDate();
+        Long groupId = form.getGroupId();
+
+        if (login == null){login = generateLogin(); }
+        if (password == null){password = generatePassword(); }
+
+        Role role = roleDAO.getByName("Student");
+
+        Users user = new Users();
+        user.setLogin(login);
+        user.setPassword(password);
+        user.setRole(role);
+        if (userDAO.add(user)){
+            Student student = new Student();
+            student.setName(name);
+            student.setSurname(surname);
+            student.setBirthDate(birthDate);
+            student.setGroup(groupDAO.getById(groupId));
+            student.setUser(user);
+
+            if(studentDAO.add(student)){
                 result = true;
             }
         }

@@ -11,6 +11,6 @@ import org.example.models.forAdmin.*;
 public interface AdminService {
 
     boolean addNewLecturer(AddFormLecturer form);
-    //boolean addNewStudent(AddFormStudent form);
-    //boolean addNewGrooup(AddFormGrooup form);
+    boolean addNewStudent(AddFormStudent form);
+    boolean addNewGrooup(AddFormGrooup form);
 }
