@@ -8,4 +8,6 @@ public class Answer{
 	private long optionId;
 	private String name;
 	private String surname;
+
+
 }
