@@ -2,9 +2,8 @@ package org.example.services;
 
 import org.example.DAO.*;
 import org.example.models.*;
-import org.example.models.forAdmin.AddFormGrooup;
-import org.example.models.forAdmin.AddFormLecturer;
-import org.example.models.forAdmin.AddFormStudent;
+import org.example.models.forAdmin.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
 import java.util.List;
@@ -12,11 +11,52 @@ import java.util.Random;
 
 public class AdminServiceImpl implements AdminService{
 
-    UserDAO userDAO = new UserDAOImpl();
-    RoleDAO roleDAO = new RoleDAOImpl();
-    GroupDAO groupDAO = new GroupDAOImpl();
-    StudentDAO studentDAO = new StudentDAOImpl();
-    LecturerDAO lecturerDAO = new LecturerDAOImpl();
+//    UserDAO userDAO = new UserDAOImpl();
+//    RoleDAO roleDAO = new RoleDAOImpl();
+//    GroupDAO groupDAO = new GroupDAOImpl();
+//    StudentDAO studentDAO = new StudentDAOImpl();
+//    LecturerDAO lecturerDAO = new LecturerDAOImpl();
+
+    @Autowired
+    private RoleDAO roleDAO;
+
+    @Autowired
+    private GroupDAO groupDAO;
+
+    @Autowired
+    private UserDAO userDAO;
+
+    @Autowired
+    private StudentDAO studentDAO;
+
+    @Autowired
+    private LecturerDAO lecturerDAO;
+
+
+    @Autowired
+    public void setRoleDAO(RoleDAO roleDAO) {
+        this.roleDAO = roleDAO;
+    }
+    @Autowired
+    public void setGroupDAO(GroupDAO groupDAO) {
+        this.groupDAO = groupDAO;
+    }
+    @Autowired
+    public void setUserDAO(UserDAO userDAO) {
+        this.userDAO = userDAO;
+    }
+    @Autowired
+    public void setStudentDAO(StudentDAO studentDAO) {
+        this.studentDAO = studentDAO;
+    }
+    @Autowired
+    public void setLecturerDAO(LecturerDAO lecturerDAO) {
+        this.lecturerDAO = lecturerDAO;
+    }
+
+
+
+
 
     @Override
     public boolean addNewLecturer(AddFormLecturer form){

@@ -5,9 +5,11 @@ import org.example.HibernateUtil.HibernateUtil;
 import org.example.models.Grooup;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public class GroupDAOImpl implements GroupDAO{
 
     @Override

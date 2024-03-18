@@ -7,8 +7,11 @@ import org.hibernate.Transaction;
 import org.example.HibernateUtil.HibernateUtil;
 
 import jakarta.persistence.Query;
+import org.springframework.stereotype.Repository;
+
 import java.util.List;
 
+@Repository
 public class RoleDAOImpl implements RoleDAO {
     @Override
     public Role getById(Long id) {

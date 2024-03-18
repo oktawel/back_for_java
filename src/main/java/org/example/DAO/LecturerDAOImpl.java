@@ -5,9 +5,11 @@ import org.example.models.Lecturer;
 import org.example.models.Users;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public class LecturerDAOImpl implements LecturerDAO{
     @Override
     public Lecturer getById(Long id){

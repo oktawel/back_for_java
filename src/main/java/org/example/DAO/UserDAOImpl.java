@@ -5,9 +5,10 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.example.models.Users;
 import org.example.HibernateUtil.HibernateUtil;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
+@Repository
 public class UserDAOImpl implements UserDAO{
     @Override
     public Users getById(Long id){
