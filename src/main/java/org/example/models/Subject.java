@@ -7,7 +7,7 @@ import org.example.models.*;
 public class Subject{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private Long id;
 	@Column(name = "name", nullable = false)
 	private String name;
 	@Column(name = "description", nullable = false)
@@ -17,12 +17,12 @@ public class Subject{
 	private Lecturer lecturer;
 
 	// Геттер для поля id
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
 	// Сеттер для поля id
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

@@ -7,17 +7,17 @@ import org.example.models.*;
 public class Grooup{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private Long id;
 	@Column(name = "name", nullable = false)
 	private String name;
 
 	// Геттер для поля id
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
 	// Сеттер для поля id
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

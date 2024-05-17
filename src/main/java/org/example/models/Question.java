@@ -7,7 +7,7 @@ import org.example.models.*;
 public class Question{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private Long id;
 	@Column(name = "text", nullable = false)
 	private String text;
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -20,12 +20,12 @@ public class Question{
 	private int cost;
 
 	// Геттер для поля id
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
 	// Сеттер для поля id
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

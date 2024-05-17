@@ -6,10 +6,18 @@ import org.example.models.Users;
 
 public class AddFormLecturer {
 
+    private Long id;
     private String login;
     private String password;
     private String name;
     private String surname;
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     // Геттер для поля login
     public String getLogin() {

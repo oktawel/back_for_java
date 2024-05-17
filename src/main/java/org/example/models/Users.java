@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 public class Users{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private Long id;
 	@Column(name = "login", nullable = false, unique = true)
 	private String login;
 	@Column(name = "password", nullable = false)
@@ -17,12 +17,12 @@ public class Users{
 	private Role role;
 
 	// Геттер для поля id
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
 	// Сеттер для поля id
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

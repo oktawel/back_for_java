@@ -4,18 +4,18 @@ import org.example.models.*;
 
 public class ResultTest{
 
-	private long id;
+	private Long id;
 	private Test test;
 	private Users user;
 	private int mark;
 
 	// Геттер для поля id
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
 	// Сеттер для поля id
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

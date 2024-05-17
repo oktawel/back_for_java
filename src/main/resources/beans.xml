@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <bean id="AdminService" class="org.example.services.AdminServiceImpl" />
+
+<!--    <bean id="CourseRepository" class="org.example.repository.CourseRepository" />-->
+<!--    <bean id="GroupRepository" class="org.example.repository.GroupRepository" />-->
+<!--    <bean id="LecturerRepository" class="org.example.repository.LecturerRepository" />-->
+<!--    <bean id="RoleRepository" class="org.example.repository.RoleRepository" />-->
+<!--    <bean id="StudentRepository" class="org.example.repository.StudentRepository" />-->
+<!--    <bean id="UserRepository" class="org.example.repository.UserRepository" />-->
+
+
+</beans>

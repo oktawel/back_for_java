@@ -7,7 +7,7 @@ import org.example.models.*;
 public class Subjects{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private Long id;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "subject_id", nullable = false)
 	private Subject subject;
@@ -16,12 +16,12 @@ public class Subjects{
 	private Grooup group;
 
 	// Геттер для поля id
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
 	// Сеттер для поля id
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

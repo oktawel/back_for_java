@@ -1,14 +1,19 @@
 package org.example.services;
 
-import org.example.DAO.*;
+import jakarta.annotation.PostConstruct;
 import org.example.models.*;
+import org.example.models.DTO.*;
 import org.example.models.forAdmin.*;
+import org.example.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
+@Service
+@Transactional
 public class AdminServiceImpl implements AdminService{
 
 //    UserDAO userDAO = new UserDAOImpl();
@@ -17,122 +22,325 @@ public class AdminServiceImpl implements AdminService{
 //    StudentDAO studentDAO = new StudentDAOImpl();
 //    LecturerDAO lecturerDAO = new LecturerDAOImpl();
 
-    @Autowired
-    private RoleDAO roleDAO;
+//    @Autowired
+//    private RoleDAO roleDAO;
+//
+//    @Autowired
+//    private GroupDAO groupDAO;
+//
+//    @Autowired
+//    private UserDAO userDAO;
+//
+//    @Autowired
+//    private StudentDAO studentDAO;
+//
+//    @Autowired
+//    private LecturerDAO lecturerDAO;
+//
+//
+//    @Autowired
+//    public void setRoleDAO(RoleDAO roleDAO) {
+//        this.roleDAO = roleDAO;
+//    }
+//    @Autowired
+//    public void setGroupDAO(GroupDAO groupDAO) {
+//        this.groupDAO = groupDAO;
+//    }
+//    @Autowired
+//    public void setUserDAO(UserDAO userDAO) {
+//        this.userDAO = userDAO;
+//    }
+//    @Autowired
+//    public void setStudentDAO(StudentDAO studentDAO) {
+//        this.studentDAO = studentDAO;
+//    }
+//    @Autowired
+//    public void setLecturerDAO(LecturerDAO lecturerDAO) {
+//        this.lecturerDAO = lecturerDAO;
+//    }
 
     @Autowired
-    private GroupDAO groupDAO;
-
+    private CourseRepository courseRepository;
     @Autowired
-    private UserDAO userDAO;
-
+    private StudentRepository studentRepository;
     @Autowired
-    private StudentDAO studentDAO;
-
+    private LecturerRepository lecturerRepository;
     @Autowired
-    private LecturerDAO lecturerDAO;
-
-
+    private GroupRepository groupRepository;
     @Autowired
-    public void setRoleDAO(RoleDAO roleDAO) {
-        this.roleDAO = roleDAO;
+    private UserRepository userRepository;
+    @Autowired
+    private RoleRepository roleRepository;
+
+    @PostConstruct
+    public void init() {
+        System.out.println("CourseRepository: " + courseRepository);
+        System.out.println("StudentRepository: " + studentRepository);
+        System.out.println("LecturerRepository: " + lecturerRepository);
+        System.out.println("GroupRepository: " + groupRepository);
+        System.out.println("UserRepository: " + userRepository);
+        System.out.println("RoleRepository: " + roleRepository);
     }
-    @Autowired
-    public void setGroupDAO(GroupDAO groupDAO) {
-        this.groupDAO = groupDAO;
-    }
-    @Autowired
-    public void setUserDAO(UserDAO userDAO) {
-        this.userDAO = userDAO;
-    }
-    @Autowired
-    public void setStudentDAO(StudentDAO studentDAO) {
-        this.studentDAO = studentDAO;
-    }
-    @Autowired
-    public void setLecturerDAO(LecturerDAO lecturerDAO) {
-        this.lecturerDAO = lecturerDAO;
-    }
 
-
-
-
-
-    @Override
-    public boolean addNewLecturer(AddFormLecturer form){
-        boolean result = false;
-
-        String login = form.getLogin();
-        String password = form.getPassword();
-        String name = form.getName();
-        String surname = form.getSurname();
-        if (login == null){login = generateLogin(); }
-        if (password == null){password = generatePassword(); }
-
-        Role role = roleDAO.getByName("Lector");
-
+    private Users saveUser(String login, String password, Role role) {
         Users user = new Users();
         user.setLogin(login);
         user.setPassword(password);
         user.setRole(role);
-        if (userDAO.add(user)){
-            Lecturer lecturer = new Lecturer();
-            lecturer.setName(name);
-            lecturer.setSurname(surname);
-            lecturer.setUser(user);
-            if(lecturerDAO.add(lecturer)){
-                result = true;
+        try {
+            userRepository.save(user);
+            return user;
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+    private Users updateUser(Long id, String login, String password, Role role) {
+        Users user = new Users();
+        user.setId(id);
+        user.setLogin(login);
+        user.setPassword(password);
+        user.setRole(role);
+        try {
+            userRepository.save(user);
+            return user;
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+    private boolean saveLecturer(Lecturer lecturer) {
+        try {
+            lecturerRepository.save(lecturer);
+            return false;
+        } catch (Exception e) {
+            return true;
+        }
+    }
+
+    private boolean saveGroup(Grooup grooup) {
+        try {
+            groupRepository.save(grooup);
+            return false;
+        } catch (Exception e) {
+            return true;
+        }
+    }
+
+    private boolean saveStudent(Student student) {
+        try {
+            studentRepository.save(student);
+            return false;
+        } catch (Exception e) {
+            return true;
+        }
+    }
+
+    @Override
+    public boolean create_updateLecturer(AddFormLecturer form){
+        String login = (form.getLogin() == null) ? generateLogin() : form.getLogin();
+        String password = (form.getPassword() == null) ? generatePassword() : form.getPassword();
+        String name = form.getName();
+        String surname = form.getSurname();
+        Long id;
+
+        Optional<Role> role = roleRepository.findById(2L);
+        if (!role.isPresent()) {
+            return false;
+        }
+
+        Lecturer lecturer = new Lecturer();
+        Users user;
+        if(form.getId() != null){
+            id = form.getId();
+            lecturer.setId(id);
+            try{
+                user = updateUser(lecturerRepository.findById(id).get().getUser().getId() ,login, password, role.get());
+            }
+            catch (Exception e){
+                return false;
             }
         }
-        return result;
-    }
-
-    @Override
-    public boolean addNewGrooup(AddFormGrooup form){
-        boolean result = false;
-        Grooup group = new Grooup();
-
-        group.setName(form.getName());
-        if (groupDAO.add(group)){
-            result = true;
+        else {
+            try{
+                user = saveUser(login, password, role.get());
+            }
+            catch (Exception e){
+                return false;
+            }
         }
-        return result;
+
+        lecturer.setName(name);
+        lecturer.setSurname(surname);
+        lecturer.setUser(user);
+
+        if (saveLecturer(lecturer)) {
+            return false;
+        }
+
+        return true;
+    }
+    @Override
+    public boolean deleteLecturer (Long id){
+        try {
+            userRepository.deleteById(lecturerRepository.findById(id).get().getUser().getId());
+            lecturerRepository.deleteById(id);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    @Override
+    public LecturerDTO getLecturerById(Long id){
+        return initializeLecturerDTO(lecturerRepository.findById(id).get()) ;
     }
 
     @Override
-    public boolean addNewStudent(AddFormStudent form){
-        boolean result = false;
+    public List<LecturerDTO> getAllLecturers() {
+        List<Lecturer> lecturers = lecturerRepository.findAll();
+        return initializeLecturerDTOs(lecturers);
+    }
 
-        String login = form.getLogin();
-        String password = form.getPassword();
+    @Override
+    public boolean create_updateGrooup(AddFormGrooup form){
+        Grooup group = new Grooup();
+        if(form.getId() != null){
+            group.setId(form.getId());
+        }
+        group.setName(form.getName());
+        if (saveGroup(group)) {
+            return false;
+        }
+        return true;
+    }
+    @Override
+    public boolean deleteGrooup (Long id){
+        try {
+            groupRepository.deleteById(id);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    @Override
+    public Optional<Grooup> getGrooupById(Long id){
+        return groupRepository.findById(id);
+    }
+    @Override
+    public List<Grooup> getAllGrooups(){
+        return groupRepository.findAll();
+    }
+
+
+
+    @Override
+    public boolean create_updateStudent(AddFormStudent form){
+        String login = (form.getLogin() == null) ? generateLogin() : form.getLogin();
+        String password = (form.getPassword() == null) ? generatePassword() : form.getPassword();
         String name = form.getName();
         String surname = form.getSurname();
         Date birthDate = form.getBirthDate();
         Long groupId = form.getGroupId();
+        Long id;
 
-        if (login == null){login = generateLogin(); }
-        if (password == null){password = generatePassword(); }
+        Optional<Role> role = roleRepository.findById(3L);
+        if (!role.isPresent()) {
+            return false;
+        }
 
-        Role role = roleDAO.getByName("Student");
-
-        Users user = new Users();
-        user.setLogin(login);
-        user.setPassword(password);
-        user.setRole(role);
-        if (userDAO.add(user)){
-            Student student = new Student();
-            student.setName(name);
-            student.setSurname(surname);
-            student.setBirthDate(birthDate);
-            student.setGroup(groupDAO.getById(groupId));
-            student.setUser(user);
-
-            if(studentDAO.add(student)){
-                result = true;
+        Student student = new Student();
+        Users user;
+        if(form.getId() != null){
+            id = form.getId();
+            student.setId(id);
+            try{
+                user = updateUser(studentRepository.findById(id).get().getUser().getId() ,login, password, role.get());
+            }
+            catch (Exception e){
+                return false;
             }
         }
-        return result;
+        else {
+            try{
+                user = saveUser(login, password, role.get());
+            }
+            catch (Exception e){
+                return false;
+            }
+        }
+
+        student.setName(name);
+        student.setSurname(surname);
+        student.setBirthDate(birthDate);
+        student.setGroup(groupRepository.findById(groupId).get());
+        student.setUser(user);
+        if (saveStudent(student)) {
+            return false;
+        }
+
+        return true;
     }
+    @Override
+    public boolean deleteStudent (Long id){
+        try {
+            userRepository.deleteById(studentRepository.findById(id).get().getUser().getId());
+            studentRepository.deleteById(id);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    @Override
+    public StudentDTO getStudentById(Long id){
+        return initializeStudentDTO(studentRepository.findById(id).get());
+    }
+    @Override
+    public List<StudentDTO> getAllStudents(){
+        List<Student> students = studentRepository.findAll();
+        return initializeStudentDTOs(students);
+    }
+
+    private LecturerDTO initializeLecturerDTO(Lecturer lecturer) {
+        LecturerDTO dto = new LecturerDTO();
+        dto.setId(lecturer.getId());
+        dto.setName(lecturer.getName());
+        dto.setSurname(lecturer.getSurname());
+        dto.setUserLogin(lecturer.getUser().getLogin());
+        dto.setUserPassword(lecturer.getUser().getPassword());
+        return dto;
+    }
+    private StudentDTO initializeStudentDTO(Student student) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        StudentDTO dto = new StudentDTO();
+        dto.setId(student.getId());
+        dto.setName(student.getName());
+        dto.setSurname(student.getSurname());
+        dto.setGroup(student.getGroup().getName());
+
+        String birthDateStr = dateFormat.format(student.getBirthDate());
+        dto.setBirthDate(birthDateStr);
+
+        dto.setUserLogin(student.getUser().getLogin());
+        dto.setUserPassword(student.getUser().getPassword());
+        return dto;
+    }
+
+    private List<LecturerDTO> initializeLecturerDTOs(List<Lecturer> lecturers) {
+        List<LecturerDTO> lecturerDTOs = new ArrayList<>();
+        for (Lecturer lecturer : lecturers) {
+            lecturerDTOs.add(initializeLecturerDTO(lecturer));
+        }
+        return lecturerDTOs;
+    }
+
+    private List<StudentDTO> initializeStudentDTOs(List<Student> students) {
+        List<StudentDTO> studentDTOs = new ArrayList<>();
+        for (Student student : students) {
+            studentDTOs.add(initializeStudentDTO(student));
+        }
+        return studentDTOs;
+    }
+
+
+
 
 
     private String generatePassword (){
