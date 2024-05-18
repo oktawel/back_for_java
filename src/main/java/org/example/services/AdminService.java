@@ -4,7 +4,7 @@ package org.example.services;
 import org.example.models.*;
 import org.example.models.DTO.LecturerDTO;
 import org.example.models.DTO.StudentDTO;
-import org.example.models.forAdmin.*;
+import org.example.models.forms.*;
 
 import java.util.List;
 import java.util.Optional;

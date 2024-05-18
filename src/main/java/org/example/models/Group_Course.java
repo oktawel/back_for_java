@@ -3,8 +3,8 @@ package org.example.models;
 import jakarta.persistence.*;
 import org.example.models.*;
 @Entity
-@Table(name = "Subjects")
-public class Subjects{
+@Table(name = "Group_Course")
+public class Group_Course {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

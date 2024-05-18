@@ -1,51 +1,52 @@
 package org.example.models;
 
+import jakarta.persistence.*;
 import org.example.models.*;
-
+@Entity
+@Table(name = "ResultTest")
 public class ResultTest{
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private Test test;
-	private Users user;
-	private int mark;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "test_id", nullable = false)
+	private Test Test ;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "student_id", nullable = false)
+	private Student Student;
+	@Column(name = "mark", nullable = true)
+	private Double mark;
 
-	// Геттер для поля id
 	public Long getId() {
 		return id;
 	}
 
-	// Сеттер для поля id
 	public void setId(Long id) {
 		this.id = id;
 	}
 
-	// Геттер для поля test
-	public Test getTest() {
-		return test;
+	public org.example.models.Test getTest() {
+		return Test;
 	}
 
-	// Сеттер для поля test
-	public void setTest(Test test) {
-		this.test = test;
+	public void setTest(org.example.models.Test test) {
+		Test = test;
 	}
 
-	// Геттер для поля user
-	public Users getUser() {
-		return user;
+	public org.example.models.Student getStudent() {
+		return Student;
 	}
 
-	// Сеттер для поля user
-	public void setUser(Users user) {
-		this.user = user;
+	public void setStudent(org.example.models.Student student) {
+		Student = student;
 	}
 
-	// Геттер для поля mark
-	public int getMark() {
+	public Double getMark() {
 		return mark;
 	}
 
-	// Сеттер для поля mark
-	public void setMark(int mark) {
+	public void setMark(Double mark) {
 		this.mark = mark;
 	}
 }

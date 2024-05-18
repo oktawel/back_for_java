@@ -3,7 +3,7 @@ package org.example.services;
 import jakarta.annotation.PostConstruct;
 import org.example.models.*;
 import org.example.models.DTO.*;
-import org.example.models.forAdmin.*;
+import org.example.models.forms.*;
 import org.example.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

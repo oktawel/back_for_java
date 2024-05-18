@@ -1,18 +1,12 @@
-package org.example.models.forAdmin;
+package org.example.models.forms;
 
-import org.example.models.Grooup;
-import org.example.models.Users;
+public class AddFormLecturer {
 
-import java.util.Date;
-
-public class AddFormStudent {
     private Long id;
     private String login;
     private String password;
     private String name;
     private String surname;
-    private Date birthDate;
-    private Long groupId;
     public Long getId() {
         return id;
     }
@@ -61,23 +55,4 @@ public class AddFormStudent {
         this.surname = surname;
     }
 
-    // Геттер для поля birthDate
-    public Date getBirthDate() {
-        return birthDate;
-    }
-
-    // Сеттер для поля birthDate
-    public void setBirthDate(Date birthDate) {
-        this.birthDate = birthDate;
-    }
-
-    // Геттер для поля groupId
-    public Long getGroupId() {
-        return groupId;
-    }
-
-    // Сеттер для поля groupId
-    public void setGroupId(Long groupId) {
-        this.groupId = groupId;
-    }
 }

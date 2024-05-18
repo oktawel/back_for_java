@@ -1,4 +1,4 @@
-package org.example.models.forAdmin;
+package org.example.models.forms;
 
 public class AddFormGrooup {
 

@@ -1,15 +1,10 @@
 package org.example.Controllers;
 
-import org.example.DAO.GroupDAO;
-import org.example.DAO.GroupDAOImpl;
 import org.example.models.DTO.LecturerDTO;
 import org.example.models.DTO.StudentDTO;
 import org.example.models.Grooup;
-import org.example.models.Lecturer;
-import org.example.models.Student;
-import org.example.models.forAdmin.*;
+import org.example.models.forms.*;
 import org.example.services.AdminService;
-import org.example.services.AdminServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -61,7 +56,24 @@ public class AdminController {
         adminService.create_updateLecturer(form);
         return  ResponseEntity.ok("Successfully");
     }
-
+    @PostMapping(value = "/group/update", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<String> UpdateGroupPage(@RequestBody AddFormGrooup form){
+        adminService.create_updateGrooup(form);
+        return  ResponseEntity.ok("Successfully");
+    }
+    @PostMapping(value = "/student/update", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<String> UpdateStudentPage(@RequestBody AddFormStudent form){
+        adminService.create_updateStudent(form);
+        return  ResponseEntity.ok("Successfully");
+    }
+    @PostMapping(value = "/lecturer/update", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<String> UpdateLecturerPage(@RequestBody AddFormLecturer form){
+        adminService.create_updateLecturer(form);
+        return  ResponseEntity.ok("Successfully");
+    }
     @DeleteMapping("/group/delete/{id}")
     public ResponseEntity<String> deleteGroup(@PathVariable Long id) {
         if (adminService.deleteGrooup(id)) {
