@@ -1,10 +1,13 @@
 package org.example.models.forms;
 
-public class AddFormCourse {
+import java.util.Set;
+
+public class UpdateFormCourse {
     private Long id;
     private String name;
     private String description;
     private Long lecturerId;
+    private Set<Long> groupsId;
 
     public Long getId() {
         return id;
@@ -36,5 +39,13 @@ public class AddFormCourse {
 
     public void setLecturerId(Long lecturerId) {
         this.lecturerId = lecturerId;
+    }
+
+    public Set<Long> getGroupsId() {
+        return groupsId;
+    }
+
+    public void setGroupsId(Set<Long> groupsId) {
+        this.groupsId = groupsId;
     }
 }

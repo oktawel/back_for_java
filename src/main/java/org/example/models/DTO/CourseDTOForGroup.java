@@ -1,10 +1,14 @@
-package org.example.models.forms;
+package org.example.models.DTO;
 
-public class AddFormCourse {
+public class CourseDTOForGroup {
     private Long id;
+
     private String name;
+
     private String description;
-    private Long lecturerId;
+
+    private String lecturerName;
+    private String lecturerSurname;
 
     public Long getId() {
         return id;
@@ -30,11 +34,19 @@ public class AddFormCourse {
         this.description = description;
     }
 
-    public Long getLecturerId() {
-        return lecturerId;
+    public String getLecturerName() {
+        return lecturerName;
     }
 
-    public void setLecturerId(Long lecturerId) {
-        this.lecturerId = lecturerId;
+    public void setLecturerName(String lecturerName) {
+        this.lecturerName = lecturerName;
+    }
+
+    public String getLecturerSurname() {
+        return lecturerSurname;
+    }
+
+    public void setLecturerSurname(String lecturerSurname) {
+        this.lecturerSurname = lecturerSurname;
     }
 }

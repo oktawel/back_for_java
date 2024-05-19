@@ -1,5 +1,6 @@
 package org.example.Controllers;
 
+import org.example.models.DTO.GroupDTO;
 import org.example.models.DTO.LecturerDTO;
 import org.example.models.DTO.StudentDTO;
 import org.example.models.Grooup;
@@ -21,8 +22,8 @@ public class AdminController {
     private AdminService adminService;
 
     @GetMapping("/groups")
-    public ResponseEntity<List<Grooup>> getAllGroups() {
-        List<Grooup> groups = adminService.getAllGrooups();
+    public ResponseEntity<List<GroupDTO>> getAllGroups() {
+        List<GroupDTO> groups = adminService.getAllGrooups();
         return ResponseEntity.ok(groups);
     }
 
@@ -100,10 +101,9 @@ public class AdminController {
     }
 
     @GetMapping("/group/{id}")
-    public ResponseEntity<Grooup> getGroupById(@PathVariable Long id) {
-        Optional<Grooup> group = adminService.getGrooupById(id);
-        return group.map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<GroupDTO> getGroupById(@PathVariable Long id) {
+        GroupDTO group = adminService.getGrooupById(id);
+        return ResponseEntity.ok(group);
     }
     @GetMapping("/student/{id}")
     public ResponseEntity<StudentDTO> getStudentById(@PathVariable Long id) {

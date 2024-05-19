@@ -2,6 +2,8 @@ package org.example.models;
 
 import jakarta.persistence.*;
 import org.example.models.*;
+
+import java.util.Set;
 @Entity
 @Table(name = "Subject")
 public class Subject{
@@ -15,6 +17,14 @@ public class Subject{
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "lector_id", nullable = false)
 	private Lecturer lecturer;
+
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(
+			name = "group_course",
+			joinColumns = @JoinColumn(name = "subject_id"),
+			inverseJoinColumns = @JoinColumn(name = "groop_id")
+	)
+	private Set<Grooup> groups;
 
 	// Геттер для поля id
 	public Long getId() {
@@ -54,5 +64,13 @@ public class Subject{
 	// Сеттер для поля lecturer
 	public void setLecturer(Lecturer lecturer) {
 		this.lecturer = lecturer;
+	}
+
+	public Set<Grooup> getGroups() {
+		return groups;
+	}
+
+	public void setGroups(Set<Grooup> groups) {
+		this.groups = groups;
 	}
 }

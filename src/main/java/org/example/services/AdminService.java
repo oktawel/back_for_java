@@ -2,6 +2,7 @@ package org.example.services;
 
 
 import org.example.models.*;
+import org.example.models.DTO.GroupDTO;
 import org.example.models.DTO.LecturerDTO;
 import org.example.models.DTO.StudentDTO;
 import org.example.models.forms.*;
@@ -33,8 +34,8 @@ public interface AdminService {
 //    boolean updateGrooup(AddFormGrooup form);
     boolean create_updateGrooup(AddFormGrooup form);
     boolean deleteGrooup (Long id);
-    Optional<Grooup> getGrooupById(Long id);
-    List<Grooup> getAllGrooups();
+    GroupDTO getGrooupById(Long id);
+    List<GroupDTO> getAllGrooups();
 
 
 }

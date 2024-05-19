@@ -11,54 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
 public class AdminServiceImpl implements AdminService{
-
-//    UserDAO userDAO = new UserDAOImpl();
-//    RoleDAO roleDAO = new RoleDAOImpl();
-//    GroupDAO groupDAO = new GroupDAOImpl();
-//    StudentDAO studentDAO = new StudentDAOImpl();
-//    LecturerDAO lecturerDAO = new LecturerDAOImpl();
-
-//    @Autowired
-//    private RoleDAO roleDAO;
-//
-//    @Autowired
-//    private GroupDAO groupDAO;
-//
-//    @Autowired
-//    private UserDAO userDAO;
-//
-//    @Autowired
-//    private StudentDAO studentDAO;
-//
-//    @Autowired
-//    private LecturerDAO lecturerDAO;
-//
-//
-//    @Autowired
-//    public void setRoleDAO(RoleDAO roleDAO) {
-//        this.roleDAO = roleDAO;
-//    }
-//    @Autowired
-//    public void setGroupDAO(GroupDAO groupDAO) {
-//        this.groupDAO = groupDAO;
-//    }
-//    @Autowired
-//    public void setUserDAO(UserDAO userDAO) {
-//        this.userDAO = userDAO;
-//    }
-//    @Autowired
-//    public void setStudentDAO(StudentDAO studentDAO) {
-//        this.studentDAO = studentDAO;
-//    }
-//    @Autowired
-//    public void setLecturerDAO(LecturerDAO lecturerDAO) {
-//        this.lecturerDAO = lecturerDAO;
-//    }
-
     @Autowired
     private CourseRepository courseRepository;
     @Autowired
@@ -221,15 +178,14 @@ public class AdminServiceImpl implements AdminService{
         }
     }
     @Override
-    public Optional<Grooup> getGrooupById(Long id){
-        return groupRepository.findById(id);
+    public GroupDTO getGrooupById(Long id){
+        return initializeGroupDTO(groupRepository.findById(id).get());
     }
     @Override
-    public List<Grooup> getAllGrooups(){
-        return groupRepository.findAll();
+    public List<GroupDTO> getAllGrooups(){
+        List<Grooup> grooups = groupRepository.findAll();
+        return initializeGroupDTOs(grooups);
     }
-
-
 
     @Override
     public boolean create_updateStudent(AddFormStudent form){
@@ -298,6 +254,29 @@ public class AdminServiceImpl implements AdminService{
         return initializeStudentDTOs(students);
     }
 
+    private GroupDTO initializeGroupDTO(Grooup group) {
+        GroupDTO dto = new GroupDTO();
+        dto.setId(group.getId());
+        dto.setName(group.getName());
+
+        Set<CourseDTOForGroup> courseDTOs = group.getSubjects().stream()
+                .map(this::convertToCourseDTO)
+                .collect(Collectors.toSet());
+        dto.setCourses(courseDTOs);
+
+        return dto;
+    }
+
+    private CourseDTOForGroup convertToCourseDTO(Subject subject) {
+        CourseDTOForGroup dto = new CourseDTOForGroup();
+        dto.setId(subject.getId());
+        dto.setName(subject.getName());
+        dto.setDescription(subject.getDescription());
+        dto.setLecturerName(subject.getLecturer().getName());
+        dto.setLecturerSurname(subject.getLecturer().getSurname());
+        return dto;
+    }
+
     private LecturerDTO initializeLecturerDTO(Lecturer lecturer) {
         LecturerDTO dto = new LecturerDTO();
         dto.setId(lecturer.getId());
@@ -321,6 +300,14 @@ public class AdminServiceImpl implements AdminService{
         dto.setUserLogin(student.getUser().getLogin());
         dto.setUserPassword(student.getUser().getPassword());
         return dto;
+    }
+
+    private List<GroupDTO> initializeGroupDTOs(List<Grooup> groups) {
+        List<GroupDTO> groupDTOs = new ArrayList<>();
+        for (Grooup group : groups) {
+            groupDTOs.add(initializeGroupDTO(group));
+        }
+        return groupDTOs;
     }
 
     private List<LecturerDTO> initializeLecturerDTOs(List<Lecturer> lecturers) {

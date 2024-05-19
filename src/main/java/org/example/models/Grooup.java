@@ -2,6 +2,9 @@ package org.example.models;
 
 import jakarta.persistence.*;
 import org.example.models.*;
+
+import java.util.Set;
+
 @Entity
 @Table(name = "Groop")
 public class Grooup{
@@ -10,6 +13,9 @@ public class Grooup{
 	private Long id;
 	@Column(name = "name", nullable = false)
 	private String name;
+
+	@ManyToMany(mappedBy = "groups")
+	private Set<Subject> subjects;
 
 	// Геттер для поля id
 	public Long getId() {
@@ -29,5 +35,12 @@ public class Grooup{
 	// Сеттер для поля name
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public Set<Subject> getSubjects() {
+		return subjects;
+	}
+	public void setSubjects(Set<Subject> subjects) {
+		this.subjects = subjects;
 	}
 }
