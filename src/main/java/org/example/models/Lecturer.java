@@ -3,6 +3,8 @@ package org.example.models;
 import jakarta.persistence.*;
 import org.example.models.*;
 
+import java.util.Set;
+
 @Entity
 @Table(name = "Lector")
 public class Lecturer{
@@ -16,6 +18,9 @@ public class Lecturer{
 	private String name;
 	@Column(name = "surname", nullable = false)
 	private String surname;
+
+	@OneToMany(mappedBy = "lecturer")
+	private Set<Subject> subjects;
 
 	// Геттер для поля id
 	public Long getId() {
@@ -57,4 +62,11 @@ public class Lecturer{
 		this.surname = surname;
 	}
 
+	public Set<Subject> getSubjects() {
+		return subjects;
+	}
+
+	public void setSubjects(Set<Subject> subjects) {
+		this.subjects = subjects;
+	}
 }

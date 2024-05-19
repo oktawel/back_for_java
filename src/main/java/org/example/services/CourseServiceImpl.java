@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -63,11 +64,59 @@ public class CourseServiceImpl implements CourseService {
         }
         return true;
     }
+
+
+
+    @Override
+    public boolean addGroupToCourse(Long courseId, Long groupId) {
+        Subject course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new RuntimeException("Course not found"));
+
+        Grooup group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new RuntimeException("Group not found"));
+
+        course.getGroups().add(group);
+        try {
+            courseRepository.save(course);
+            return false;
+        } catch (Exception e) {
+            return true;
+        }
+    }
+
+    @Override
+    public boolean removeGroupFromCourse(Long courseId, Long groupId) {
+        Subject course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new RuntimeException("Course not found"));
+
+        Grooup group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new RuntimeException("Group not found"));
+
+        course.getGroups().remove(group);
+        try {
+            courseRepository.save(course);
+            return false;
+        } catch (Exception e) {
+            return true;
+        }
+    }
+
+
     @Override
     public boolean deleteCourse(Long id){
         try {
-            courseRepository.deleteById(id);
-            return true;
+            Optional<Subject> courseOptional = courseRepository.findById(id);
+            if (courseOptional.isPresent()) {
+                Subject course = courseOptional.get();
+                for (Grooup group : course.getGroups()) {
+                    group.getSubjects().remove(course);
+                    groupRepository.save(group);
+                }
+                courseRepository.delete(course);
+                return true;
+            } else {
+                return false;
+            }
         } catch (Exception e) {
             return false;
         }
@@ -96,10 +145,14 @@ public class CourseServiceImpl implements CourseService {
         dto.setId(course.getId());
         dto.setName(course.getName());
         dto.setDescription(course.getDescription());
-        dto.setLecturerName(course.getLecturer().getName());
-        dto.setLecturerSurname(course.getLecturer().getSurname());
-        //dto.setGroups(course.getGroups());
-
+        if (course.getLecturer() != null){
+            dto.setLecturerName(course.getLecturer().getName());
+            dto.setLecturerSurname(course.getLecturer().getSurname());
+        }
+        else{
+            dto.setLecturerName(null);
+            dto.setLecturerSurname(null);
+        }
         Set<GroupDTOForCourse> groupDTOs = course.getGroups().stream()
                 .map(this::convertToGroupDTO)
                 .collect(Collectors.toSet());

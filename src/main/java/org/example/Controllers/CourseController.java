@@ -41,6 +41,16 @@ public class CourseController {
         return  ResponseEntity.ok("Successfully");
     }
 
+    @GetMapping(value = "/course/{courseId}/connectGroup/{groupId}")
+    public ResponseEntity<String> ConnectGroupCoursePage(@PathVariable Long courseId, @PathVariable Long groupId){
+        courseService.addGroupToCourse(courseId, groupId);
+        return  ResponseEntity.ok("Successfully");
+    }
+    @GetMapping(value = "/course/{courseId}/removeConnect/{groupId}")
+    public ResponseEntity<String> RemoveConnectGroupCoursePage(@PathVariable Long courseId, @PathVariable Long groupId){
+        courseService.removeGroupFromCourse(courseId, groupId);
+        return  ResponseEntity.ok("Successfully");
+    }
 
     @PostMapping(value = "/course/update", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody

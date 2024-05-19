@@ -10,8 +10,10 @@ public class Test{
 	private Long id;
 	@Column(name = "name", nullable = false)
 	private String name;
-	@Column(name = "description", nullable = false)
+	@Column(name = "description", nullable = true)
 	private String description;
+	@Column(name = "open", nullable = false)
+	private boolean open;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "subject_id", nullable = false)
 	private Subject subject;
@@ -45,7 +47,12 @@ public class Test{
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
+	public boolean isOpen() {
+		return open;
+	}
+	public void setOpen(boolean open) {
+		this.open = open;
+	}
 	// Геттер для поля subject
 	public Subject getSubject() {
 		return subject;

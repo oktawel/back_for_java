@@ -7,7 +7,8 @@ import org.example.models.forms.UpdateFormCourse;
 import java.util.List;
 
 public interface CourseService {
-
+    boolean addGroupToCourse(Long courseId, Long groupId);
+    boolean removeGroupFromCourse(Long courseId, Long groupId);
     boolean create_updateCourse(AddFormCourse form);
     //boolean updateCourse(UpdateFormCourse form);
     boolean deleteCourse(Long id);

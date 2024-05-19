@@ -139,6 +139,13 @@ public class AdminServiceImpl implements AdminService{
     public boolean deleteLecturer (Long id){
         try {
             userRepository.deleteById(lecturerRepository.findById(id).get().getUser().getId());
+            List<Subject> courses = courseRepository.findByLecturerId(id);
+            if (!(courses.isEmpty())) {
+                for (Subject course : courses) {
+                    course.setLecturer(null);
+                    courseRepository.save(course);
+                }
+            }
             lecturerRepository.deleteById(id);
             return true;
         } catch (Exception e) {
@@ -171,8 +178,18 @@ public class AdminServiceImpl implements AdminService{
     @Override
     public boolean deleteGrooup (Long id){
         try {
-            groupRepository.deleteById(id);
-            return true;
+            Optional<Grooup> groupOptional = groupRepository.findById(id);
+            if (groupOptional.isPresent()) {
+                Grooup group = groupOptional.get();
+                for (Subject course : group.getSubjects()) {
+                    course.getGroups().remove(group);
+                    courseRepository.save(course);
+                }
+                groupRepository.delete(group);
+                return true;
+            } else {
+                return false;
+            }
         } catch (Exception e) {
             return false;
         }

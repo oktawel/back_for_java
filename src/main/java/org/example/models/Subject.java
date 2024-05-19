@@ -18,7 +18,7 @@ public class Subject{
 	@JoinColumn(name = "lector_id", nullable = false)
 	private Lecturer lecturer;
 
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinTable(
 			name = "group_course",
 			joinColumns = @JoinColumn(name = "subject_id"),
