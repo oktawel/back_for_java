@@ -3,6 +3,7 @@ package org.example.services;
 import org.example.models.DTO.CourseDTO;
 import org.example.models.DTO.GroupDTOForCourse;
 import org.example.models.DTO.StudentDTO;
+import org.example.models.DTO.TestDTO;
 import org.example.models.Grooup;
 import org.example.models.Student;
 import org.example.models.Subject;
@@ -30,6 +31,8 @@ public class CourseServiceImpl implements CourseService {
     private LecturerRepository lecturerRepository;
     @Autowired
     private GroupRepository groupRepository;
+    @Autowired
+    private TestService testService;
 
     @Override
     public boolean create_updateCourse(AddFormCourse form){
@@ -111,6 +114,10 @@ public class CourseServiceImpl implements CourseService {
                 for (Grooup group : course.getGroups()) {
                     group.getSubjects().remove(course);
                     groupRepository.save(group);
+                }
+                List<TestDTO> tests = testService.getTestsBySubjectId(id);
+                for (TestDTO test : tests) {
+                    testService.deleteTest(test.getId());
                 }
                 courseRepository.delete(course);
                 return true;
