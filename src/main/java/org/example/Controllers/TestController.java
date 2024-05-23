@@ -2,6 +2,7 @@ package org.example.Controllers;
 
 import org.example.models.DTO.CourseDTO;
 import org.example.models.DTO.TestDTO;
+import org.example.models.DTO.TestOpenDTO;
 import org.example.models.forms.AddFormCourse;
 import org.example.models.forms.AddFormTest;
 import org.example.services.CourseService;
@@ -30,7 +31,11 @@ public class TestController {
         TestDTO test = testService.getTestById(id);
         return ResponseEntity.ok(test);
     }
-
+    @GetMapping("/test/open/{id}")
+    public ResponseEntity<TestOpenDTO> getOpenTestById(@PathVariable Long id) {
+        TestOpenDTO test = testService.getOpenTestById(id);
+        return ResponseEntity.ok(test);
+    }
     @GetMapping("/testsByCourse/{subjectId}")
     public ResponseEntity<List<TestDTO>> getTestsBySubjectId(@PathVariable Long subjectId) {
         List<TestDTO> tests = testService.getTestsBySubjectId(subjectId);

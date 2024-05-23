@@ -3,6 +3,7 @@ package org.example.services;
 import org.example.models.DTO.CourseDTO;
 import org.example.models.DTO.GroupDTOForCourse;
 import org.example.models.DTO.TestDTO;
+import org.example.models.DTO.TestOpenDTO;
 import org.example.models.Grooup;
 import org.example.models.Subject;
 import org.example.models.Test;
@@ -30,6 +31,8 @@ public class TestServiceImpl implements TestService {
     private TestRepository testRepository;
     @Autowired
     private CourseRepository courseRepository;
+    @Autowired
+    private QuestionService questionService;
     @Override
     public List<TestDTO> getTestsBySubjectId(Long subjectId) {
         List<Test> tests = testRepository.findBySubjectId(subjectId);
@@ -84,6 +87,11 @@ public class TestServiceImpl implements TestService {
         List<Test> tests = testRepository.findAll();
         return initializeTestDTOs(tests);
     }
+    @Override
+    public TestOpenDTO getOpenTestById(Long id){
+        return initializeTestOpenDTO(testRepository.findById(id).get());
+    }
+
 
     private boolean saveTest(Test test) {
         try {
@@ -110,5 +118,24 @@ public class TestServiceImpl implements TestService {
             testDTOs.add(initializeTestDTO(test));
         }
         return testDTOs;
+    }
+
+    private TestOpenDTO initializeTestOpenDTO(Test test) {
+        TestOpenDTO dto = new TestOpenDTO();
+        dto.setId(test.getId());
+        dto.setName(test.getName());
+        dto.setDescription(test.getDescription());
+        dto.setOpen(test.isOpen());
+        dto.setSubjectId(test.getSubject().getId());
+        dto.setQuestions(questionService.getQuestionsByTestId(test.getId()));
+        return dto;
+    }
+
+    private List<TestOpenDTO> initializeTestOpenDTOs(List<Test> tests) {
+        List<TestOpenDTO> testOpenDTOs = new ArrayList<>();
+        for (Test test : tests) {
+            testOpenDTOs.add(initializeTestOpenDTO(test));
+        }
+        return testOpenDTOs;
     }
 }
