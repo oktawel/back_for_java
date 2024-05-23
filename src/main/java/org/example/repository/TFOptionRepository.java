@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface TFOptionRepository extends JpaRepository<TFOption, Long> {
 
+    TFOption findByTextAndCorrect(String text, boolean correct);
 }

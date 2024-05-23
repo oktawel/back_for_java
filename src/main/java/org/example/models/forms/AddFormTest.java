@@ -2,6 +2,7 @@ package org.example.models.forms;
 
 import jakarta.persistence.*;
 import org.example.models.Subject;
+import java.util.List;
 
 public class AddFormTest {
 
@@ -14,6 +15,8 @@ public class AddFormTest {
     private boolean open;
 
     private Long subjectId;
+
+    private List<AddFormQuestion> addFormQuestionList;
 
     public Long getId() {
         return id;
@@ -53,5 +56,13 @@ public class AddFormTest {
 
     public void setSubjectId(Long subjectId) {
         this.subjectId = subjectId;
+    }
+
+    public List<AddFormQuestion> getAddFormQuestionList() {
+        return addFormQuestionList;
+    }
+
+    public void setAddFormQuestionList(List<AddFormQuestion> addFormQuestionList) {
+        this.addFormQuestionList = addFormQuestionList;
     }
 }

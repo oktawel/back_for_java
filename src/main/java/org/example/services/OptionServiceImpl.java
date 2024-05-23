@@ -3,6 +3,7 @@ package org.example.services;
 
 import org.example.models.*;
 import org.example.models.DTO.OptionDTO;
+import org.example.models.forms.AddFormOption;
 import org.example.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -97,4 +98,71 @@ public class OptionServiceImpl implements OptionService{
         return optionDTOS;
     }
 
+    @Override
+    public boolean addOptions(Long questionId, List<AddFormOption> options){
+        try {
+            for (AddFormOption option: options){
+                Optional<Question> optionalQuestion = questionRepository.findById(questionId);
+                if (optionalQuestion.isPresent()){
+                    Question question = optionalQuestion.get();
+                    switch (question.getType().getId().intValue()){
+                        case (1): {
+                            System.out.println("1");
+                            FreeOption freeOption = new FreeOption();
+                            freeOption.setText(option.getText());
+                            freeOption.setQuestion(question);
+                            if (option.getId() != null){
+                                freeOption.setId(option.getId());
+                            }
+                            freeOptionRepository.save(freeOption);
+                            break;
+                        }
+                        case (2): {
+                            System.out.println("2");
+                            OneOption oneOption = new OneOption();
+                            oneOption.setText(option.getText());
+                            oneOption.setQuestion(question);
+                            oneOption.setCorrect(option.isCorrect());
+                            if (option.getId() != null){
+                                oneOption.setId(option.getId());
+                            }
+                            oneOptionRepository.save(oneOption);
+                            break;
+                        }
+                        case (3): {
+                            System.out.println("3");
+                            ManyOption manyOption = new ManyOption();
+                            manyOption.setText(option.getText());
+                            manyOption.setQuestion(question);
+                            manyOption.setCorrect(option.isCorrect());
+                            if (option.getId() != null){
+                                manyOption.setId(option.getId());
+                            }
+                            manyOptionRepository.save(manyOption);
+                            break;
+                        }
+                        case (4): {
+                            System.out.println("4");
+                            OptionTF_Question optionTFQuestion = new OptionTF_Question();
+                            optionTFQuestion.setQuestion(question);
+                            optionTFQuestion.setTfOption(tfOptionRepository.findByTextAndCorrect(option.getText(), option.isCorrect()));
+                            if (option.getId() != null){
+                                optionTFQuestion.setId(option.getId());
+                            }
+                            optionTFQuestionRepository.save(optionTFQuestion);
+                            break;
+                        }
+                    }
+                }
+                else {
+                    return false;
+                }
+            }
+            System.out.println("Option add");
+            return true;
+        }
+        catch (Exception e){
+            return false;
+        }
+    }
 }

@@ -48,6 +48,7 @@ public class TestController {
     @PostMapping(value = "/test/add", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<String> AddTestPage(@RequestBody AddFormTest form){
+        System.out.println("Start");
         testService.create_updateTest(form);
         return  ResponseEntity.ok("Successfully");
     }

@@ -41,21 +41,31 @@ public class TestServiceImpl implements TestService {
 
     @Override
     public boolean create_updateTest(AddFormTest form){
-        Test test = new Test();
-        Long id;
-
-        if(form.getId() != null){
-            id = form.getId();
-            test.setId(id);
-        }
-        test.setName(form.getName());
-        test.setDescription(form.getDescription());
-        test.setOpen(form.isOpen());
-        test.setSubject(courseRepository.findById(form.getSubjectId()).get());
-        if (saveTest(test)) {
+        System.out.println("Start add");
+        try {
+            Test test = new Test();
+            Long id;
+            System.out.println("1");
+            if(form.getId() != null){
+                id = form.getId();
+                test.setId(id);
+            }
+            System.out.println("2");
+            test.setName(form.getName());
+            System.out.println("3");
+            test.setDescription(form.getDescription());
+            System.out.println("4");
+            test.setOpen(form.isOpen());
+            System.out.println("5");
+            test.setSubject(courseRepository.findById(form.getSubjectId()).get());
+            System.out.println("Start save test");
+            Long testId = testRepository.saveAndReturnId(test);
+            System.out.println("Test add");
+            questionService.addQuestions(testId, form.getAddFormQuestionList());
+            return true;
+        } catch (Exception e) {
             return false;
         }
-        return true;
     }
 
     @Override
@@ -89,6 +99,7 @@ public class TestServiceImpl implements TestService {
     }
     @Override
     public TestOpenDTO getOpenTestById(Long id){
+        System.out.println("Test");
         return initializeTestOpenDTO(testRepository.findById(id).get());
     }
 

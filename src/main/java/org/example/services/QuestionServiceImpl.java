@@ -1,13 +1,15 @@
 package org.example.services;
 
+import org.example.models.*;
 import org.example.models.DTO.QuestionDTO;
 import org.example.models.DTO.TestDTO;
-import org.example.models.Question;
-import org.example.models.Test;
+import org.example.models.forms.AddFormOption;
+import org.example.models.forms.AddFormQuestion;
 import org.example.models.forms.AddFormTest;
 import org.example.repository.CourseRepository;
 import org.example.repository.QuestionRepository;
 import org.example.repository.TestRepository;
+import org.example.repository.TypeQuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,11 +22,16 @@ import java.util.Optional;
 @Transactional
 public class QuestionServiceImpl implements QuestionService {
     @Autowired
+    private TestRepository testRepository;
+    @Autowired
     private QuestionRepository questionRepository;
+    @Autowired
+    private TypeQuestionRepository typeQuestionRepository;
     @Autowired
     private OptionService optionService;
     @Override
     public List<QuestionDTO> getQuestionsByTestId(Long testId) {
+        System.out.println("Question");
         List<QuestionDTO> questionDTOS = new ArrayList<>();
         List<Question> questions = questionRepository.findByTestId(testId);
         for (Question question : questions){
@@ -38,5 +45,36 @@ public class QuestionServiceImpl implements QuestionService {
             questionDTOS.add(questionDTO);
         }
         return questionDTOS;
+    }
+
+    @Override
+    public boolean addQuestions(Long testId,  List<AddFormQuestion> questions){
+        try {
+            for (AddFormQuestion questionForm: questions){
+                Optional<Test> optionalTest = testRepository.findById(testId);
+                if (optionalTest.isPresent()){
+                    Test test = optionalTest.get();
+                    Question question = new Question();
+                    question.setTest(test);
+                    question.setCost(questionForm.getCost());
+                    question.setText(questionForm.getText());
+                    question.setType(typeQuestionRepository.findById(questionForm.getTypeId()).get());
+                    if (questionForm.getId() != null){
+                        question.setId(questionForm.getId());
+                    }
+                    Long qiestionId = questionRepository.saveAndReturnId(question);
+                    System.out.println("Question add");
+                    optionService.addOptions(qiestionId, questionForm.getAddFormOptionList());
+                }
+                else {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+        catch (Exception e){
+            return false;
+        }
     }
 }
