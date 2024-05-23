@@ -17,16 +17,30 @@ import java.util.Optional;
 public class OptionServiceImpl implements OptionService{
     @Autowired
     private QuestionRepository questionRepository;
+//    @Autowired
+//    private FreeOptionRepository freeOptionRepository;
+//    @Autowired
+//    private ManyOptionRepository manyOptionRepository;
+//    @Autowired
+//    private OneOptionRepository oneOptionRepository;
+//    @Autowired
+//    private TFOptionRepository tfOptionRepository;
+
+
     @Autowired
-    private FreeOptionRepository freeOptionRepository;
+    private FreeOptionService freeOptionService;
     @Autowired
-    private ManyOptionRepository manyOptionRepository;
+    private OneOptionService oneOptionService;
     @Autowired
-    private OneOptionRepository oneOptionRepository;
+    private ManyOptionService manyOptionService;
     @Autowired
-    private TFOptionRepository tfOptionRepository;
-    @Autowired
-    private OptionTF_QuestionRepository optionTFQuestionRepository;
+    private TFOptionService tfOptionService;
+
+
+
+//    @Autowired
+//    private OptionTF_QuestionRepository optionTFQuestionRepository;
+    @Override
     public List<OptionDTO> getOptionsByQuestionId(Long typeQuestionId, Long questiontId) {
         List<OptionDTO> optionDTOS = new ArrayList<>();
 
@@ -46,7 +60,7 @@ public class OptionServiceImpl implements OptionService{
 //                break;
 //            }
             case (2):{
-                List<OneOption> options = oneOptionRepository.findByQuestionId(questiontId);
+                List<OneOption> options = oneOptionService.findByQuestionId(questiontId);
                 if (options.isEmpty()){
                     return null;
                 }
@@ -61,7 +75,7 @@ public class OptionServiceImpl implements OptionService{
                 break;
             }
             case (3):{
-                List<ManyOption> options = manyOptionRepository.findByQuestionId(questiontId);
+                List<ManyOption> options = manyOptionService.findByQuestionId(questiontId);
                 if (options.isEmpty()){
                     return null;
                 }
@@ -76,17 +90,19 @@ public class OptionServiceImpl implements OptionService{
                 break;
             }
             case (4): {
-                List<OptionTF_Question> connects = optionTFQuestionRepository.findAll();
+                List<OptionTF_Question> connects = tfOptionService.getAllConnects();
                 if (connects.isEmpty()) {
                     return null;
                 }
                 for (OptionTF_Question connect : connects) {
-                    OptionDTO optionDTO = new OptionDTO();
-                    optionDTO.setId(connect.getId());
-                    optionDTO.setQuestionId(connect.getQuestion().getId());
-                    optionDTO.setText(connect.getTfOption().getText());
-                    optionDTO.setCorrect(connect.getTfOption().isCorrect());
-                    optionDTOS.add(optionDTO);
+                    if (connect.getQuestion().getId().equals(questiontId)) {
+                        OptionDTO optionDTO = new OptionDTO();
+                        optionDTO.setId(connect.getId());
+                        optionDTO.setQuestionId(connect.getQuestion().getId());
+                        optionDTO.setText(connect.getTfOption().getText());
+                        optionDTO.setCorrect(connect.getTfOption().isCorrect());
+                        optionDTOS.add(optionDTO);
+                    }
                 }
                 break;
             }
@@ -97,7 +113,6 @@ public class OptionServiceImpl implements OptionService{
         }
         return optionDTOS;
     }
-
     @Override
     public boolean addOptions(Long questionId, List<AddFormOption> options){
         try {
@@ -114,7 +129,7 @@ public class OptionServiceImpl implements OptionService{
                             if (option.getId() != null){
                                 freeOption.setId(option.getId());
                             }
-                            freeOptionRepository.save(freeOption);
+                            freeOptionService.saveOption(freeOption);
                             break;
                         }
                         case (2): {
@@ -126,7 +141,7 @@ public class OptionServiceImpl implements OptionService{
                             if (option.getId() != null){
                                 oneOption.setId(option.getId());
                             }
-                            oneOptionRepository.save(oneOption);
+                            oneOptionService.saveOption(oneOption);
                             break;
                         }
                         case (3): {
@@ -138,18 +153,18 @@ public class OptionServiceImpl implements OptionService{
                             if (option.getId() != null){
                                 manyOption.setId(option.getId());
                             }
-                            manyOptionRepository.save(manyOption);
+                            manyOptionService.saveOption(manyOption);
                             break;
                         }
                         case (4): {
                             System.out.println("4");
                             OptionTF_Question optionTFQuestion = new OptionTF_Question();
                             optionTFQuestion.setQuestion(question);
-                            optionTFQuestion.setTfOption(tfOptionRepository.findByTextAndCorrect(option.getText(), option.isCorrect()));
+                            optionTFQuestion.setTfOption(tfOptionService.getTFOptionByTextAndCorrect(option.getText(), option.isCorrect()));
                             if (option.getId() != null){
                                 optionTFQuestion.setId(option.getId());
                             }
-                            optionTFQuestionRepository.save(optionTFQuestion);
+                            tfOptionService.saveOption(optionTFQuestion);
                             break;
                         }
                     }
@@ -159,6 +174,48 @@ public class OptionServiceImpl implements OptionService{
                 }
             }
             System.out.println("Option add");
+            return true;
+        }
+        catch (Exception e){
+            return false;
+        }
+    }
+    @Override
+    public boolean deleteOption(Long typeQuestionId, Long questiontId){
+        try {
+            switch (typeQuestionId.intValue()){
+                case (1):{
+                    Optional<FreeOption> option = freeOptionService.findByQuestionId(questiontId);
+                    freeOptionService.deleteOption(option.get().getId());
+                    break;
+                }
+                case (2):{
+                    List<OneOption> options = oneOptionService.findByQuestionId(questiontId);
+                    for (OneOption oneOption : options){
+                        oneOptionService.deleteOption(oneOption.getId());
+                    }
+                    break;
+                }
+                case (3):{
+                    List<ManyOption> options = manyOptionService.findByQuestionId(questiontId);
+                    for (ManyOption manyOption : options){
+                        manyOptionService.deleteOption(manyOption.getId());
+                    }
+                    break;
+                }
+                case (4):{
+                    List<OptionTF_Question> connects = tfOptionService.getAllConnects();
+                    for (OptionTF_Question connect : connects) {
+                        if (connect.getQuestion().getId().equals(questiontId)) {
+                            tfOptionService.deleteOption(connect.getId());
+                        }
+                    }
+                    break;
+                }
+                default:{
+                    return false;
+                }
+            }
             return true;
         }
         catch (Exception e){

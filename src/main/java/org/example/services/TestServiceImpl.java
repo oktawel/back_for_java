@@ -41,26 +41,18 @@ public class TestServiceImpl implements TestService {
 
     @Override
     public boolean create_updateTest(AddFormTest form){
-        System.out.println("Start add");
         try {
             Test test = new Test();
             Long id;
-            System.out.println("1");
             if(form.getId() != null){
                 id = form.getId();
                 test.setId(id);
             }
-            System.out.println("2");
             test.setName(form.getName());
-            System.out.println("3");
             test.setDescription(form.getDescription());
-            System.out.println("4");
             test.setOpen(form.isOpen());
-            System.out.println("5");
             test.setSubject(courseRepository.findById(form.getSubjectId()).get());
-            System.out.println("Start save test");
             Long testId = testRepository.saveAndReturnId(test);
-            System.out.println("Test add");
             questionService.addQuestions(testId, form.getAddFormQuestionList());
             return true;
         } catch (Exception e) {
@@ -74,10 +66,7 @@ public class TestServiceImpl implements TestService {
             Optional<Test> testOptional = testRepository.findById(id);
             if (testOptional.isPresent()) {
                 Test test = testOptional.get();
-//                for (Grooup group : course.getGroups()) {
-//                    group.getSubjects().remove(course);
-//                    groupRepository.save(group);
-//                }
+                questionService.deleteQuestions(test.getId());
                 testRepository.delete(test);
                 return true;
             } else {
@@ -99,7 +88,6 @@ public class TestServiceImpl implements TestService {
     }
     @Override
     public TestOpenDTO getOpenTestById(Long id){
-        System.out.println("Test");
         return initializeTestOpenDTO(testRepository.findById(id).get());
     }
 

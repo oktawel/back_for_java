@@ -77,4 +77,20 @@ public class QuestionServiceImpl implements QuestionService {
             return false;
         }
     }
+    @Override
+    public boolean deleteQuestions(Long testId){
+        try {
+            List<Question> questions = questionRepository.findByTestId(testId);
+            if (!questions.isEmpty()){
+                for (Question question: questions){
+                    optionService.deleteOption(question.getType().getId(),question.getId());
+                    questionRepository.delete(question);
+                }
+            }
+            return true;
+        }
+        catch (Exception e){
+            return false;
+        }
+    }
 }

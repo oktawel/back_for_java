@@ -17,4 +17,6 @@ public interface QuestionService {
     List<QuestionDTO> getQuestionsByTestId(Long testId);
     boolean addQuestions(Long testId, List<AddFormQuestion> questions);
 
+    boolean deleteQuestions(Long testId);
+//    boolean deleteQuestion(Long questionId);
 }
