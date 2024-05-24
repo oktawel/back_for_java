@@ -3,6 +3,7 @@ package org.example.services;
 
 import org.example.models.*;
 import org.example.models.DTO.OptionDTO;
+import org.example.models.forms.AddFormAnswerOption;
 import org.example.models.forms.AddFormOption;
 import org.example.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +36,10 @@ public class OptionServiceImpl implements OptionService{
     private ManyOptionService manyOptionService;
     @Autowired
     private TFOptionService tfOptionService;
-
-
+    @Autowired
+    private ResultTestRepository resultTestRepository;
+    @Autowired
+    private AnswerRepository answerRepository;
 
 //    @Autowired
 //    private OptionTF_QuestionRepository optionTFQuestionRepository;
@@ -222,4 +225,52 @@ public class OptionServiceImpl implements OptionService{
             return false;
         }
     }
+    @Override
+    public boolean addAnswerOption(Long resultTestId, Long questionId, AddFormAnswerOption formOption){
+        Answer answer = new Answer();
+        try{
+            Question question = questionRepository.findById(questionId).get();
+            answer.setQuestion(question);
+            answer.setResultTest(resultTestRepository.findById(resultTestId).get());
+            switch (question.getType().getId().intValue()){
+                case (1):{
+                    String textAnswer = formOption.getTextAnswer();
+                    answer.setFree(textAnswer);
+                    if (textAnswer.equals(freeOptionService.findByQuestionId(questionId).get().getText())){
+                        answer.setCorrect(true);
+                    }
+                    else {
+                        answer.setCorrect(false);
+                    }
+                    break;
+                }
+                case (2):{
+                    OneOption oneOption = oneOptionService.findById(formOption.getOptionId()).get();
+                    answer.setOneOption(oneOption);
+                    answer.setCorrect(oneOption.isCorrect());
+                    break;
+                }
+                case (3):{
+                    ManyOption manyOption = manyOptionService.findById(formOption.getOptionId()).get();
+                    answer.setManyOption(manyOption);
+                    answer.setCorrect(manyOption.isCorrect());
+                    break;
+                }
+                case (4):{
+                    TFOption tfOption = tfOptionService.findById(formOption.getOptionId()).get();
+                    answer.setTfOption(tfOption);
+                    answer.setCorrect(tfOption.isCorrect());
+                    break;
+                }
+                default:
+                    return false;
+            }
+            answerRepository.save(answer);
+            return true;
+        }
+        catch (Exception e){
+            return false;
+        }
+    }
+
 }

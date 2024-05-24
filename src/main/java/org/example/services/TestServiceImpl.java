@@ -1,19 +1,12 @@
 package org.example.services;
 
+import org.example.models.*;
 import org.example.models.DTO.CourseDTO;
 import org.example.models.DTO.GroupDTOForCourse;
 import org.example.models.DTO.TestDTO;
 import org.example.models.DTO.TestOpenDTO;
-import org.example.models.Grooup;
-import org.example.models.Subject;
-import org.example.models.Test;
-import org.example.models.forms.AddFormCourse;
-import org.example.models.forms.AddFormTest;
-import org.example.models.forms.UpdateFormCourse;
-import org.example.repository.CourseRepository;
-import org.example.repository.GroupRepository;
-import org.example.repository.LecturerRepository;
-import org.example.repository.TestRepository;
+import org.example.models.forms.*;
+import org.example.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +23,11 @@ public class TestServiceImpl implements TestService {
     @Autowired
     private TestRepository testRepository;
     @Autowired
+    private ResultTestRepository resultTestRepository;
+    @Autowired
     private CourseRepository courseRepository;
+    @Autowired
+    private StudentRepository studentRepository;
     @Autowired
     private QuestionService questionService;
     @Override
@@ -100,6 +97,26 @@ public class TestServiceImpl implements TestService {
             return true;
         }
     }
+
+    @Override
+    public boolean addAnswer(AddFormAnswerTest test){
+        ResultTest resultTest = new ResultTest();
+        try {
+            resultTest.setTest(testRepository.findById(test.getTestId()).get());
+            resultTest.setStudent(studentRepository.findById(test.getStudentId()).get());
+            Long resultTestId = resultTestRepository.saveAndReturnId(resultTest);
+            for(AddFormAnswerQuestion question: test.getAnswerQuestions()){
+               questionService.addAnswerQuestion(resultTestId, question);
+            }
+            return true;
+        }
+        catch (Exception e){
+            return false;
+        }
+
+    }
+
+
 
     private TestDTO initializeTestDTO(Test test) {
         TestDTO dto = new TestDTO();

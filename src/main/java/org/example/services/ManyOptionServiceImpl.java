@@ -44,4 +44,9 @@ public class ManyOptionServiceImpl implements ManyOptionService{
             return false;
         }
     }
+
+    @Override
+    public Optional<ManyOption> findById(Long id){
+        return manyOptionRepository.findById(id);
+    }
 }

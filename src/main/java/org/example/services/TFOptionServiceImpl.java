@@ -52,4 +52,8 @@ public class TFOptionServiceImpl implements TFOptionService{
             return false;
         }
     }
+    @Override
+    public Optional<TFOption> findById(Long id){
+        return tfOptionRepository.findById(id);
+    }
 }

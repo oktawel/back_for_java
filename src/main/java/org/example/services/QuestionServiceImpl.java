@@ -3,9 +3,7 @@ package org.example.services;
 import org.example.models.*;
 import org.example.models.DTO.QuestionDTO;
 import org.example.models.DTO.TestDTO;
-import org.example.models.forms.AddFormOption;
-import org.example.models.forms.AddFormQuestion;
-import org.example.models.forms.AddFormTest;
+import org.example.models.forms.*;
 import org.example.repository.CourseRepository;
 import org.example.repository.QuestionRepository;
 import org.example.repository.TestRepository;
@@ -86,6 +84,19 @@ public class QuestionServiceImpl implements QuestionService {
                     optionService.deleteOption(question.getType().getId(),question.getId());
                     questionRepository.delete(question);
                 }
+            }
+            return true;
+        }
+        catch (Exception e){
+            return false;
+        }
+    }
+
+    @Override
+    public boolean addAnswerQuestion (Long resultTestId, AddFormAnswerQuestion answerQuestion){
+        try {
+            for(AddFormAnswerOption answerOption: answerQuestion.getAnswerOptions()){
+                optionService.addAnswerOption(resultTestId, answerQuestion.getQuestionId(), answerOption);
             }
             return true;
         }

@@ -3,6 +3,8 @@ package org.example.Controllers;
 import org.example.models.DTO.CourseDTO;
 import org.example.models.DTO.TestDTO;
 import org.example.models.DTO.TestOpenDTO;
+import org.example.models.forms.AddFormAnswerQuestion;
+import org.example.models.forms.AddFormAnswerTest;
 import org.example.models.forms.AddFormCourse;
 import org.example.models.forms.AddFormTest;
 import org.example.services.CourseService;
@@ -67,6 +69,13 @@ public class TestController {
         } else {
             return ResponseEntity.badRequest().body("Failed to delete test with ID " + id);
         }
+    }
+
+    @PostMapping(value = "/test/answer", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<String> AnswerTestPage(@RequestBody AddFormAnswerTest form){
+        testService.addAnswer(form);
+        return  ResponseEntity.ok("Successfully");
     }
 
 }

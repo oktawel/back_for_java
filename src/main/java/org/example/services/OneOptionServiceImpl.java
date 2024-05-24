@@ -44,4 +44,8 @@ public class OneOptionServiceImpl implements OneOptionService{
             return false;
         }
     }
+    @Override
+    public Optional<OneOption> findById(Long id){
+        return oneOptionRepository.findById(id);
+    }
 }

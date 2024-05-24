@@ -20,6 +20,9 @@ public class Answer {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "many_id", nullable = true)
 	private ManyOption manyOption;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "tf_id", nullable = true)
+	private TFOption tfOption;
 	@Column(name = "correct", nullable = false)
 	private boolean correct ;
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -64,6 +67,14 @@ public class Answer {
 
 	public void setManyOption(ManyOption manyOption) {
 		this.manyOption = manyOption;
+	}
+
+	public TFOption getTfOption() {
+		return tfOption;
+	}
+
+	public void setTfOption(TFOption tfOption) {
+		this.tfOption = tfOption;
 	}
 
 	public boolean isCorrect() {
