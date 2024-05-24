@@ -2,8 +2,7 @@ package org.example.services;
 
 
 import org.example.models.*;
-import org.example.models.DTO.LecturerDTO;
-import org.example.models.DTO.StudentDTO;
+import org.example.models.DTO.*;
 import org.example.models.forAdmin.*;
 
 import java.util.List;

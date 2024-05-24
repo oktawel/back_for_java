@@ -4,7 +4,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
 
 
-    <bean id="AdminService" class="org.example.services.AdminServiceImpl" />
+    <bean id="AdminService" class="org.example.services.AdminServiceImpl" />z
 
 <!--    <bean id="CourseRepository" class="org.example.repository.CourseRepository" />-->
 <!--    <bean id="GroupRepository" class="org.example.repository.GroupRepository" />-->

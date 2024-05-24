@@ -6,6 +6,7 @@ import org.example.models.DTO.*;
 import org.example.models.forAdmin.*;
 import org.example.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +15,7 @@ import java.util.*;
 
 @Service
 @Transactional
+@Primary
 public class AdminServiceImpl implements AdminService{
 
 //    UserDAO userDAO = new UserDAOImpl();
