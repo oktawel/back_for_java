@@ -1,8 +1,6 @@
 package org.example.services;
 
 import org.example.models.*;
-import org.example.models.DTO.CourseDTO;
-import org.example.models.DTO.GroupDTOForCourse;
 import org.example.models.DTO.TestDTO;
 import org.example.models.DTO.TestOpenDTO;
 import org.example.models.forms.*;
@@ -14,8 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -33,30 +29,48 @@ public class TestServiceImpl implements TestService {
     @Override
     public List<TestDTO> getTestsBySubjectId(Long subjectId) {
         List<Test> tests = testRepository.findBySubjectId(subjectId);
-        return initializeTestDTOs(tests);
+        return initializeTestDTOs(1L,tests);
     }
 
     @Override
     public boolean create_updateTest(AddFormTest form){
         try {
             Test test = new Test();
-            Long id;
-            if(form.getId() != null){
-                id = form.getId();
-                test.setId(id);
-            }
+            Long testId;
             test.setName(form.getName());
             test.setDescription(form.getDescription());
             test.setOpen(form.isOpen());
             test.setSubject(courseRepository.findById(form.getSubjectId()).get());
-            Long testId = testRepository.saveAndReturnId(test);
-            questionService.addQuestions(testId, form.getAddFormQuestionList());
+            if(form.getId() != null){
+                testId = form.getId();
+                test.setId(testId);
+                saveTest(test);
+            }
+            else {
+                testId = testRepository.saveAndReturnId(test);
+                questionService.addQuestions(testId, form.getAddFormQuestionList());
+            }
             return true;
         } catch (Exception e) {
             return false;
         }
     }
-
+    @Override
+    public boolean updateTest(AddFormTest form){
+        try {
+            Test test = new Test();
+            test.setId(form.getId());
+            test.setName(form.getName());
+            test.setDescription(form.getDescription());
+            test.setOpen(form.isOpen());
+            test.setSubject(courseRepository.findById(form.getSubjectId()).get());
+            saveTest(test);
+            return true;
+        } catch (Exception e) {
+            System.out.println(e);
+            return false;
+        }
+    }
     @Override
     public boolean deleteTest(Long id){
         try {
@@ -76,24 +90,30 @@ public class TestServiceImpl implements TestService {
 
     @Override
     public TestDTO getTestById(Long id){
-        return initializeTestDTO(testRepository.findById(id).get());
+        return initializeTestDTO(1L, testRepository.findById(id).get());
     }
     @Override
     public List<TestDTO> getAllTests(){
         List<Test> tests = testRepository.findAll();
-        return initializeTestDTOs(tests);
+        return initializeTestDTOs(1L, tests);
     }
     @Override
     public TestOpenDTO getOpenTestById(Long id){
-        return initializeTestOpenDTO(testRepository.findById(id).get());
+        TestOpenDTO test = initializeTestOpenDTO(testRepository.findById(id).get());
+        if (!test.isOpen()) {
+            return null;
+        }
+        return test;
     }
 
 
     private boolean saveTest(Test test) {
         try {
+            System.out.println("save");
             testRepository.save(test);
             return false;
         } catch (Exception e) {
+            System.out.println(e);
             return true;
         }
     }
@@ -118,20 +138,28 @@ public class TestServiceImpl implements TestService {
 
 
 
-    private TestDTO initializeTestDTO(Test test) {
+    private TestDTO initializeTestDTO(Long studentId, Test test) {
         TestDTO dto = new TestDTO();
         dto.setId(test.getId());
         dto.setName(test.getName());
         dto.setDescription(test.getDescription());
         dto.setOpen(test.isOpen());
         dto.setSubjectId(test.getSubject().getId());
+
+        Optional<ResultTest> optionalResultTest = resultTestRepository.findByStudentIdAndTestId(studentId, test.getId());
+        if (optionalResultTest.isPresent()){
+            dto.setMark(optionalResultTest.get().getMark());
+        }
+        else {
+            dto.setMark(null);
+        }
         return dto;
     }
 
-    private List<TestDTO> initializeTestDTOs(List<Test> tests) {
+    private List<TestDTO> initializeTestDTOs(Long studentId, List<Test> tests) {
         List<TestDTO> testDTOs = new ArrayList<>();
         for (Test test : tests) {
-            testDTOs.add(initializeTestDTO(test));
+            testDTOs.add(initializeTestDTO(studentId, test));
         }
         return testDTOs;
     }

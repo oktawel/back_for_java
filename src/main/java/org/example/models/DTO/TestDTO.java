@@ -9,6 +9,7 @@ public class TestDTO {
     private String description;
     private boolean open;
     private Long SubjectId;
+    private Double mark;
 
     public Long getId() {
         return id;
@@ -48,5 +49,13 @@ public class TestDTO {
 
     public void setSubjectId(Long subjectId) {
         SubjectId = subjectId;
+    }
+
+    public Double getMark() {
+        return mark;
+    }
+
+    public void setMark(Double mark) {
+        this.mark = mark;
     }
 }

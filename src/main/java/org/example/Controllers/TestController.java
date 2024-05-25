@@ -10,11 +10,13 @@ import org.example.models.forms.AddFormTest;
 import org.example.services.CourseService;
 import org.example.services.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -34,9 +36,15 @@ public class TestController {
         return ResponseEntity.ok(test);
     }
     @GetMapping("/test/open/{id}")
-    public ResponseEntity<TestOpenDTO> getOpenTestById(@PathVariable Long id) {
+    public ResponseEntity<?> getOpenTestById(@PathVariable Long id) {
+//        TestOpenDTO test = testService.getOpenTestById(id);
+//        return ResponseEntity.ok(test);
         TestOpenDTO test = testService.getOpenTestById(id);
-        return ResponseEntity.ok(test);
+        if (test != null) {
+            return ResponseEntity.ok(test);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The test is not available");
+        }
     }
     @GetMapping("/testsByCourse/{subjectId}")
     public ResponseEntity<List<TestDTO>> getTestsBySubjectId(@PathVariable Long subjectId) {

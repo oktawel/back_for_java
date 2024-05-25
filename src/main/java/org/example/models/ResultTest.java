@@ -11,10 +11,10 @@ public class ResultTest{
 	private Long id;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "test_id", nullable = false)
-	private Test Test ;
+	private Test test ;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "student_id", nullable = false)
-	private Student Student;
+	private Student student;
 	@Column(name = "mark", nullable = true)
 	private Double mark;
 
@@ -27,19 +27,19 @@ public class ResultTest{
 	}
 
 	public org.example.models.Test getTest() {
-		return Test;
+		return test;
 	}
 
 	public void setTest(org.example.models.Test test) {
-		Test = test;
+		test = test;
 	}
 
 	public org.example.models.Student getStudent() {
-		return Student;
+		return student;
 	}
 
 	public void setStudent(org.example.models.Student student) {
-		Student = student;
+		student = student;
 	}
 
 	public Double getMark() {
