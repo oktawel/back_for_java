@@ -114,47 +114,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public double getQuestionPoints (AddFormAnswerQuestion answerQuestion){
-//        try {
-//            Question question = questionRepository.findById(answerQuestion.getQuestionId()).get();
-//            int questionType = question.getType().getId().intValue();
-//            double point = 0;
-//            switch (questionType){
-//                case (1):
-//                {
-//
-//                    break;
-//                }
-//                case (2):
-//                {
-//
-//                    break;
-//                }
-//                case (3):
-//                {
-//
-//                    break;
-//                }
-//                case (4):
-//                {
-//
-//                    break;
-//                }
-//                default:
-//                {
-//
-//                }
-//            }
-//
-//
-//
-//            for(AddFormAnswerOption answerOption: answerQuestion.getAnswerOptions()){
-//                optionService.addAnswerOption(resultTestId, answerQuestion.getQuestionId(), answerOption);
-//            }
-//            return 0.0;
-//        }
-//        catch (Exception e){
-//            return false;
-//        }
+        //Не реализовано
         return 0.0;
     }
 }
