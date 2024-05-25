@@ -26,20 +26,20 @@ public class ResultTest{
 		this.id = id;
 	}
 
-	public org.example.models.Test getTest() {
+	public Test getTest() {
 		return test;
 	}
 
-	public void setTest(org.example.models.Test test) {
-		test = test;
+	public void setTest(Test test) {
+		this.test = test;
 	}
 
-	public org.example.models.Student getStudent() {
+	public Student getStudent() {
 		return student;
 	}
 
-	public void setStudent(org.example.models.Student student) {
-		student = student;
+	public void setStudent(Student student) {
+		this.student = student;
 	}
 
 	public Double getMark() {

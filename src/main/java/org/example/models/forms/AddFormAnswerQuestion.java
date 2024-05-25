@@ -5,8 +5,6 @@ import java.util.Set;
 
 public class AddFormAnswerQuestion {
     private Long questionId;
-
-
     private List<AddFormAnswerOption> answerOptions;
 
     public Long getQuestionId() {

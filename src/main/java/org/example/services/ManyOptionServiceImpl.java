@@ -49,4 +49,8 @@ public class ManyOptionServiceImpl implements ManyOptionService{
     public Optional<ManyOption> findById(Long id){
         return manyOptionRepository.findById(id);
     }
+    @Override
+    public List<ManyOption> getOptionsByQuestionAndCorrect(Long questionId, boolean correct){
+        return manyOptionRepository.findByQuestionIdAndCorrect(questionId, correct);
+    }
 }

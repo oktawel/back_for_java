@@ -93,15 +93,68 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public boolean addAnswerQuestion (Long resultTestId, AddFormAnswerQuestion answerQuestion){
+    public double addAnswerQuestion (Long resultTestId, AddFormAnswerQuestion answerQuestion){
+        double points = 0;
         try {
-            for(AddFormAnswerOption answerOption: answerQuestion.getAnswerOptions()){
-                optionService.addAnswerOption(resultTestId, answerQuestion.getQuestionId(), answerOption);
+            Question question = questionRepository.findById(answerQuestion.getQuestionId()).get();
+            if (question.getType().getId() == 3 && answerQuestion.getAnswerOptions().size() == optionService.getOptionsByQuestionId(question.getType().getId() ,question.getId()).size()){
+                points = 0;
             }
-            return true;
+            else{
+                for(AddFormAnswerOption answerOption: answerQuestion.getAnswerOptions()){
+                    points += optionService.addAnswerOption(resultTestId, answerQuestion.getQuestionId(), answerOption);
+                }
+            }
+            return points;
         }
         catch (Exception e){
-            return false;
+            return 0;
         }
+    }
+
+    @Override
+    public double getQuestionPoints (AddFormAnswerQuestion answerQuestion){
+//        try {
+//            Question question = questionRepository.findById(answerQuestion.getQuestionId()).get();
+//            int questionType = question.getType().getId().intValue();
+//            double point = 0;
+//            switch (questionType){
+//                case (1):
+//                {
+//
+//                    break;
+//                }
+//                case (2):
+//                {
+//
+//                    break;
+//                }
+//                case (3):
+//                {
+//
+//                    break;
+//                }
+//                case (4):
+//                {
+//
+//                    break;
+//                }
+//                default:
+//                {
+//
+//                }
+//            }
+//
+//
+//
+//            for(AddFormAnswerOption answerOption: answerQuestion.getAnswerOptions()){
+//                optionService.addAnswerOption(resultTestId, answerQuestion.getQuestionId(), answerOption);
+//            }
+//            return 0.0;
+//        }
+//        catch (Exception e){
+//            return false;
+//        }
+        return 0.0;
     }
 }

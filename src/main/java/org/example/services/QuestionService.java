@@ -16,5 +16,7 @@ public interface QuestionService {
 
     boolean deleteQuestions(Long testId);
 //    boolean deleteQuestion(Long questionId);
-    boolean addAnswerQuestion (Long resultTestId, AddFormAnswerQuestion answerQuestion);
+    double addAnswerQuestion (Long resultTestId, AddFormAnswerQuestion answerQuestion);
+
+    double getQuestionPoints (AddFormAnswerQuestion answerQuestion);
 }

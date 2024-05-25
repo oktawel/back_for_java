@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface ManyOptionService {
     boolean deleteOption(Long optionId);
     List<ManyOption> findByQuestionId(Long questionId);
-
     boolean saveOption(ManyOption option);
     Optional<ManyOption> findById(Long id);
+    List<ManyOption> getOptionsByQuestionAndCorrect(Long questionId, boolean correct);
 }

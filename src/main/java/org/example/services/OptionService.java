@@ -14,5 +14,5 @@ public interface OptionService {
 
     boolean addOptions(Long questionId, List<AddFormOption> options);
     boolean deleteOption(Long typeId, Long questiontId);
-    boolean addAnswerOption(Long resultTestId, Long questionId, AddFormAnswerOption formOption);
+    double addAnswerOption(Long resultTestId, Long questionId, AddFormAnswerOption formOption);
 }

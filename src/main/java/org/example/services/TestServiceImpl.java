@@ -1,6 +1,7 @@
 package org.example.services;
 
 import org.example.models.*;
+import org.example.models.DTO.QuestionDTO;
 import org.example.models.DTO.TestDTO;
 import org.example.models.DTO.TestOpenDTO;
 import org.example.models.forms.*;
@@ -121,19 +122,35 @@ public class TestServiceImpl implements TestService {
     @Override
     public boolean addAnswer(AddFormAnswerTest test){
         ResultTest resultTest = new ResultTest();
+        double points = 0;
         try {
-            resultTest.setTest(testRepository.findById(test.getTestId()).get());
-            resultTest.setStudent(studentRepository.findById(test.getStudentId()).get());
+            Test testInfo = testRepository.findById(test.getTestId()).get();
+            Student studentInfo = studentRepository.findById(test.getStudentId()).get();
+
+            resultTest.setTest(testInfo);
+            resultTest.setStudent(studentInfo);
+
             Long resultTestId = resultTestRepository.saveAndReturnId(resultTest);
             for(AddFormAnswerQuestion question: test.getAnswerQuestions()){
-               questionService.addAnswerQuestion(resultTestId, question);
+                points += questionService.addAnswerQuestion(resultTestId, question);
             }
+
+            List<QuestionDTO> questions = questionService.getQuestionsByTestId(test.getTestId());
+            int maxPoints = 0;
+            int countQuestion = 0;
+            for(QuestionDTO question: questions){
+                maxPoints += question.getCost();
+                countQuestion += 1;
+            }
+            ResultTest result = resultTestRepository.findById(resultTestId).get();
+            Double mark = (points / (maxPoints / countQuestion)) * 2;
+            result.setMark(mark);
+            resultTestRepository.save(result);
             return true;
         }
         catch (Exception e){
             return false;
         }
-
     }
 
 

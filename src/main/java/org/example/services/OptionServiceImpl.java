@@ -100,7 +100,7 @@ public class OptionServiceImpl implements OptionService{
                 for (OptionTF_Question connect : connects) {
                     if (connect.getQuestion().getId().equals(questiontId)) {
                         OptionDTO optionDTO = new OptionDTO();
-                        optionDTO.setId(connect.getId());
+                        optionDTO.setId(connect.getTfOption().getId());
                         optionDTO.setQuestionId(connect.getQuestion().getId());
                         optionDTO.setText(connect.getTfOption().getText());
                         optionDTO.setCorrect(connect.getTfOption().isCorrect());
@@ -226,8 +226,9 @@ public class OptionServiceImpl implements OptionService{
         }
     }
     @Override
-    public boolean addAnswerOption(Long resultTestId, Long questionId, AddFormAnswerOption formOption){
+    public double addAnswerOption(Long resultTestId, Long questionId, AddFormAnswerOption formOption){
         Answer answer = new Answer();
+        double point = 0;
         try{
             Question question = questionRepository.findById(questionId).get();
             answer.setQuestion(question);
@@ -238,6 +239,7 @@ public class OptionServiceImpl implements OptionService{
                     answer.setFree(textAnswer);
                     if (textAnswer.equals(freeOptionService.findByQuestionId(questionId).get().getText())){
                         answer.setCorrect(true);
+                        point += question.getCost();
                     }
                     else {
                         answer.setCorrect(false);
@@ -247,29 +249,42 @@ public class OptionServiceImpl implements OptionService{
                 case (2):{
                     OneOption oneOption = oneOptionService.findById(formOption.getOptionId()).get();
                     answer.setOneOption(oneOption);
-                    answer.setCorrect(oneOption.isCorrect());
+                    boolean correct = oneOption.isCorrect();
+                    answer.setCorrect(correct);
+                    if (correct){
+                        point += question.getCost();
+                    }
                     break;
                 }
                 case (3):{
                     ManyOption manyOption = manyOptionService.findById(formOption.getOptionId()).get();
                     answer.setManyOption(manyOption);
-                    answer.setCorrect(manyOption.isCorrect());
+                    boolean correct = manyOption.isCorrect();
+                    answer.setCorrect(correct);
+                    int quantity = manyOptionService.getOptionsByQuestionAndCorrect(questionId, true).size();
+                    if (correct){
+                        point += (double) question.getCost() /quantity;
+                    }
                     break;
                 }
                 case (4):{
                     TFOption tfOption = tfOptionService.findById(formOption.getOptionId()).get();
                     answer.setTfOption(tfOption);
-                    answer.setCorrect(tfOption.isCorrect());
+                    boolean correct = tfOption.isCorrect();
+                    answer.setCorrect(correct);
+                    if (correct){
+                        point += question.getCost();
+                    }
                     break;
                 }
                 default:
-                    return false;
+                    return 0;
             }
             answerRepository.save(answer);
-            return true;
+            return point;
         }
         catch (Exception e){
-            return false;
+            return 0;
         }
     }
 
