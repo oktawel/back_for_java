@@ -81,6 +81,7 @@ public class QuestionServiceImpl implements QuestionService {
             List<Question> questions = questionRepository.findByTestId(testId);
             if (!questions.isEmpty()){
                 for (Question question: questions){
+                    optionService.deleteAnswers(question.getId());
                     optionService.deleteOption(question.getType().getId(),question.getId());
                     questionRepository.delete(question);
                 }
@@ -88,6 +89,7 @@ public class QuestionServiceImpl implements QuestionService {
             return true;
         }
         catch (Exception e){
+            System.out.println(e);
             return false;
         }
     }

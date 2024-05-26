@@ -18,16 +18,6 @@ import java.util.Optional;
 public class OptionServiceImpl implements OptionService{
     @Autowired
     private QuestionRepository questionRepository;
-//    @Autowired
-//    private FreeOptionRepository freeOptionRepository;
-//    @Autowired
-//    private ManyOptionRepository manyOptionRepository;
-//    @Autowired
-//    private OneOptionRepository oneOptionRepository;
-//    @Autowired
-//    private TFOptionRepository tfOptionRepository;
-
-
     @Autowired
     private FreeOptionService freeOptionService;
     @Autowired
@@ -41,27 +31,13 @@ public class OptionServiceImpl implements OptionService{
     @Autowired
     private AnswerRepository answerRepository;
 
-//    @Autowired
-//    private OptionTF_QuestionRepository optionTFQuestionRepository;
+
     @Override
     public List<OptionDTO> getOptionsByQuestionId(Long typeQuestionId, Long questiontId) {
         List<OptionDTO> optionDTOS = new ArrayList<>();
 
 
         switch (typeQuestionId.intValue()){
-//            case (1):{
-//                Optional<FreeOption> option = freeOptionRepository.findByQuestionId(questiontId);
-//                if (!option.isPresent()){
-//                    return null;
-//                }
-//                FreeOption freeOption = option.get();
-//                OptionDTO optionDTO = new OptionDTO();
-//                optionDTO.setId(freeOption.getId());
-//                optionDTO.setQuestionId(freeOption.getQuestion().getId());
-//                optionDTO.setText(freeOption.getText());
-//                optionDTO.setCorrect(freeOption.ge);
-//                break;
-//            }
             case (2):{
                 List<OneOption> options = oneOptionService.findByQuestionId(questiontId);
                 if (options.isEmpty()){
@@ -222,6 +198,19 @@ public class OptionServiceImpl implements OptionService{
             return true;
         }
         catch (Exception e){
+            return false;
+        }
+    }
+    @Override
+    public boolean deleteAnswers(Long questionId){
+        try {
+            for (Answer answer: answerRepository.findByQuestionId(questionId)){
+                answerRepository.delete(answer);
+            }
+            return true;
+        }
+        catch (Exception e){
+            System.out.println(e);
             return false;
         }
     }

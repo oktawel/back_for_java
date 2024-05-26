@@ -79,12 +79,16 @@ public class TestServiceImpl implements TestService {
             if (testOptional.isPresent()) {
                 Test test = testOptional.get();
                 questionService.deleteQuestions(test.getId());
+                for (ResultTest resultTest : resultTestRepository.findByTestId(id)){
+                    resultTestRepository.delete(resultTest);
+                }
                 testRepository.delete(test);
                 return true;
             } else {
                 return false;
             }
         } catch (Exception e) {
+            System.out.println(e);
             return false;
         }
     }
