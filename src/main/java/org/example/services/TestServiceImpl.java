@@ -27,6 +27,8 @@ public class TestServiceImpl implements TestService {
     private StudentRepository studentRepository;
     @Autowired
     private QuestionService questionService;
+    @Autowired
+    private OptionService optionService;
     @Override
     public List<TestDTO> getTestsBySubjectId(Long subjectId) {
         List<Test> tests = testRepository.findBySubjectId(subjectId);
@@ -111,6 +113,21 @@ public class TestServiceImpl implements TestService {
         return test;
     }
 
+    @Override
+    public boolean deleteRestultTest(Long studentId){
+        try {
+            for (ResultTest resultTest : resultTestRepository.findByStudentId(studentId)){
+                optionService.deleteAnswersByResultTestId(resultTest.getId());
+                resultTestRepository.delete(resultTest);
+            }
+            return true;
+        }
+        catch (Exception e){
+            System.out.println(e);
+            return false;
+        }
+
+    }
 
     private boolean saveTest(Test test) {
         try {

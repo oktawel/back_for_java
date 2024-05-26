@@ -13,6 +13,7 @@ import java.util.Optional;
 @Repository
 public interface ResultTestRepository extends JpaRepository <ResultTest, Long>{
     Optional<ResultTest> findByStudentIdAndTestId(Long studentId, Long testId);
+    List<ResultTest> findByStudentId(Long studentId);
     List<ResultTest> findByTestId(Long testId);
     default Long saveAndReturnId(ResultTest resultTest) {
         ResultTest savedResultTest = save(resultTest);

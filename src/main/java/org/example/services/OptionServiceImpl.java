@@ -214,6 +214,20 @@ public class OptionServiceImpl implements OptionService{
             return false;
         }
     }
+
+    @Override
+    public boolean deleteAnswersByResultTestId(Long resultTestId){
+        try {
+            for (Answer answer: answerRepository.findByResulTestId(resultTestId)){
+                answerRepository.delete(answer);
+            }
+            return true;
+        }
+        catch (Exception e){
+            System.out.println(e);
+            return false;
+        }
+    }
     @Override
     public double addAnswerOption(Long resultTestId, Long questionId, AddFormAnswerOption formOption){
         Answer answer = new Answer();

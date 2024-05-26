@@ -28,6 +28,8 @@ public class AdminServiceImpl implements AdminService{
     private UsersRepository userRepository;
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private TestService testService;
 
     @PostConstruct
     public void init() {
@@ -255,6 +257,7 @@ public class AdminServiceImpl implements AdminService{
     public boolean deleteStudent (Long id){
         try {
             userRepository.deleteById(studentRepository.findById(id).get().getUser().getId());
+            testService.deleteRestultTest(id);
             studentRepository.deleteById(id);
             return true;
         } catch (Exception e) {

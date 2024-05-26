@@ -27,6 +27,7 @@ public class QuestionServiceImpl implements QuestionService {
     private TypeQuestionRepository typeQuestionRepository;
     @Autowired
     private OptionService optionService;
+
     @Override
     public List<QuestionDTO> getQuestionsByTestId(Long testId) {
         System.out.println("Question");

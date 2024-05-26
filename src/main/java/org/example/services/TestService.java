@@ -17,4 +17,5 @@ public interface TestService {
     List<TestDTO> getTestsBySubjectId(Long subjectId);
     TestOpenDTO getOpenTestById(Long id);
     boolean addAnswer(AddFormAnswerTest test);
+    boolean deleteRestultTest (Long studentId);
 }
