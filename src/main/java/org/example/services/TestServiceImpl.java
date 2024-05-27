@@ -158,13 +158,11 @@ public class TestServiceImpl implements TestService {
 
             List<QuestionDTO> questions = questionService.getQuestionsByTestId(test.getTestId());
             int maxPoints = 0;
-            int countQuestion = 0;
             for(QuestionDTO question: questions){
                 maxPoints += question.getCost();
-                countQuestion += 1;
             }
             ResultTest result = resultTestRepository.findById(resultTestId).get();
-            Double mark = (points / (maxPoints / countQuestion)) * 2;
+            Double mark = (points / maxPoints) * 5;
             result.setMark(mark);
             resultTestRepository.save(result);
             return true;
