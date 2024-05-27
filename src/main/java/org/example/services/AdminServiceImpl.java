@@ -94,6 +94,41 @@ public class AdminServiceImpl implements AdminService{
     }
 
     @Override
+    public List<LecturerDTO> getLecturersByName(String name){
+        List<Lecturer> lecturers = lecturerRepository.findByName(name);
+        return initializeLecturerDTOs(lecturers);
+    }
+    @Override
+    public List<LecturerDTO> getLecturersBySurname(String surname){
+        List<Lecturer> lecturers = lecturerRepository.findBySurname(surname);
+        return initializeLecturerDTOs(lecturers);
+    }
+    @Override
+    public List<StudentDTO> getStudentsByName(String name){
+        List<Student> students = studentRepository.findByName(name);
+        return initializeStudentDTOs(students);
+    }
+    @Override
+    public List<StudentDTO> getStudentsBySurname(String surname){
+        List<Student> students = studentRepository.findBySurname(surname);
+        return initializeStudentDTOs(students);
+    }
+    @Override
+    public List<StudentDTO> getStudentsByGroup(Long groupId){
+        List<Student> students = studentRepository.findByGroupId(groupId);
+        return initializeStudentDTOs(students);
+    }
+    @Override
+    public List<GroupDTO> getGrooupsByName(String name){
+        List<Grooup> grooups = groupRepository.findByName(name);
+        return initializeGroupDTOs(grooups);
+    }
+
+
+
+
+
+    @Override
     public boolean create_updateLecturer(AddFormLecturer form){
         String login = (form.getLogin() == null) ? generateLogin() : form.getLogin();
         String password = (form.getPassword() == null) ? generatePassword() : form.getPassword();
@@ -186,6 +221,9 @@ public class AdminServiceImpl implements AdminService{
                 for (Subject course : group.getSubjects()) {
                     course.getGroups().remove(group);
                     courseRepository.save(course);
+                }
+                for (Student student: studentRepository.findByGroupId(group.getId())){
+                    student.setGroup(null);
                 }
                 groupRepository.delete(group);
                 return true;

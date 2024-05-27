@@ -21,6 +21,44 @@ public class AdminController {
     @Autowired
     private AdminService adminService;
 
+    @GetMapping("/lecturersByName")
+    public ResponseEntity<List<LecturerDTO>> getAllLecturersByName(@RequestParam String name) {
+        List<LecturerDTO> lecturerDTOList = adminService.getLecturersByName(name);
+        return ResponseEntity.ok(lecturerDTOList);
+    }
+    @GetMapping("/lecturersBySurname")
+    public ResponseEntity<List<LecturerDTO>> getAllLecturersBySurname(@RequestParam String surname) {
+        List<LecturerDTO> lecturerDTOList = adminService.getLecturersBySurname(surname);
+        return ResponseEntity.ok(lecturerDTOList);
+    }
+    @GetMapping("/studentsByName")
+    public ResponseEntity<List<StudentDTO>> getAllStudentsByName(@RequestParam String name) {
+        List<StudentDTO> studentDTOList = adminService.getStudentsByName(name);
+        return ResponseEntity.ok(studentDTOList);
+    }
+    @GetMapping("/studentsBySurname")
+    public ResponseEntity<List<StudentDTO>> getAllStudentsBySurname(@RequestParam String surname) {
+        List<StudentDTO> studentDTOList = adminService.getStudentsBySurname(surname);
+        return ResponseEntity.ok(studentDTOList);
+    }
+    @GetMapping("/studentsByGroup")
+    public ResponseEntity<List<StudentDTO>> getAllStudentsByGroup(@RequestParam Long id) {
+        List<StudentDTO> studentDTOList = adminService.getStudentsByGroup(id);
+        return ResponseEntity.ok(studentDTOList);
+    }
+    @GetMapping("/groupsByName")
+    public ResponseEntity<List<GroupDTO>> getAllGroupsByName(@RequestParam String name) {
+        List<GroupDTO> groupDTOList = adminService.getGrooupsByName(name);
+        return ResponseEntity.ok(groupDTOList);
+    }
+
+
+
+
+
+
+
+
     @GetMapping("/groups")
     public ResponseEntity<List<GroupDTO>> getAllGroups() {
         List<GroupDTO> groups = adminService.getAllGrooups();

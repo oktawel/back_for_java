@@ -20,7 +20,7 @@ public class Student{
 	@Column(name = "birthDate", nullable = false)
 	private Date birthDate;
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "groop_id", nullable = false)
+	@JoinColumn(name = "groop_id", nullable = true)
 	private Grooup group;
 
 	// Геттер для поля id

@@ -12,29 +12,27 @@ import java.util.Optional;
 
 public interface AdminService {
 
-//    boolean addNewLecturer(AddFormLecturer form);
-//    boolean updateLecturer(AddFormLecturer form);
     boolean create_updateLecturer(AddFormLecturer form);
     boolean deleteLecturer (Long id);
     LecturerDTO getLecturerById(Long id);
+    List<LecturerDTO> getLecturersByName(String name);
+    List<LecturerDTO> getLecturersBySurname(String surname);
     List<LecturerDTO> getAllLecturers();
 
 
-
-//    boolean addNewStudent(AddFormStudent form);
-//    boolean updateStudent(AddFormStudent form);
     boolean create_updateStudent(AddFormStudent form);
     boolean deleteStudent (Long id);
     StudentDTO getStudentById(Long id);
+    List<StudentDTO> getStudentsByName(String name);
+    List<StudentDTO> getStudentsBySurname(String surname);
+    List<StudentDTO> getStudentsByGroup(Long groupId);
     List<StudentDTO> getAllStudents();
 
 
-
-//    boolean addNewGrooup(AddFormGrooup form);
-//    boolean updateGrooup(AddFormGrooup form);
     boolean create_updateGrooup(AddFormGrooup form);
     boolean deleteGrooup (Long id);
     GroupDTO getGrooupById(Long id);
+    List<GroupDTO> getGrooupsByName(String name);
     List<GroupDTO> getAllGrooups();
 
 
