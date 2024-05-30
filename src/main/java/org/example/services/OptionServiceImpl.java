@@ -218,7 +218,7 @@ public class OptionServiceImpl implements OptionService{
     @Override
     public boolean deleteAnswersByResultTestId(Long resultTestId){
         try {
-            for (Answer answer: answerRepository.findByResulTestId(resultTestId)){
+            for (Answer answer: answerRepository.findByResultTestId(resultTestId)){
                 answerRepository.delete(answer);
             }
             return true;
