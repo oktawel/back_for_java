@@ -18,7 +18,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/admin")
-@PreAuthorize("hasRole('Admin')")
 public class AdminController {
     @Autowired
     private AdminService adminService;
@@ -74,9 +73,10 @@ public class AdminController {
     }
 
     @GetMapping("/lecturers")
-    @PreAuthorize("hasRole('ROLE_Admin')")
     public ResponseEntity<List<LecturerDTO>> getAllLecturers() {
+        System.out.println("Z");
         List<LecturerDTO> lecturers = adminService.getAllLecturers();
+        System.out.println("Z");
         return ResponseEntity.ok(lecturers);
     }
 
