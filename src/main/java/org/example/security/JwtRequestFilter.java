@@ -21,6 +21,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
+
+    @Autowired
+    private TokenBlacklistService tokenBlacklistService;
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
 
@@ -37,11 +40,15 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
             jwtToken = requestTokenHeader.substring(7);
             try {
+                if (tokenBlacklistService.isTokenInvalid(jwtToken)) {
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    return;
+                }
                 username = jwtTokenUtil.extractUsername(jwtToken);
+            } catch (IllegalArgumentException e) {
+                System.out.println("Unable to get JWT Token");
             } catch (ExpiredJwtException e) {
                 System.out.println("JWT Token has expired");
-            } catch (Exception e) {
-                System.out.println("Unable to get JWT Token or Token invalid: " + e.getMessage());
             }
         } else {
             System.out.println("JWT Token does not begin with Bearer String");
@@ -49,6 +56,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         // Проверяем валидность токена
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+
             UserDetails userDetails = this.customUserDetailsService.loadUserByUsername(username);
             if (jwtTokenUtil.validateToken(jwtToken, userDetails)) {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(

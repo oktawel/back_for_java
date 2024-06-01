@@ -2,6 +2,7 @@ package org.example.Controllers;
 
 
 import io.jsonwebtoken.Claims;
+import jakarta.servlet.http.HttpServletResponse;
 import org.example.models.DTO.UserInfoDTO;
 import org.example.models.Lecturer;
 import org.example.models.Student;
@@ -28,6 +29,8 @@ public class AuthController {
 
     @Autowired
     private CustomUserDetailsService userDetailsService;
+    @Autowired
+    private TokenBlacklistService tokenBlacklistService;
 
     @PostMapping("/authenticate")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest){
@@ -55,27 +58,41 @@ public class AuthController {
     @GetMapping("/validate")
     public ResponseEntity<String> validateToken(@RequestHeader("Authorization") String authHeader) {
         String token = authHeader.substring(7);
+        if (tokenBlacklistService.isTokenInvalid(token)) {
+            return ResponseEntity.status(HttpServletResponse.SC_UNAUTHORIZED).body("Token is invalid.");
+        }
         Claims claims = jwtTokenUtil.decodeJwt(token);
         return ResponseEntity.ok("Token is valid.");
     }
 
     @GetMapping("/user")
     public ResponseEntity<?> getUser(@RequestHeader("Authorization") String authHeader) {
-        String token = authHeader.substring(7);
-        Claims claims = jwtTokenUtil.decodeJwt(token);
-        UserInfoDTO userInfoDTO = userDetailsService.getUserInformation(claims);
-        if (userInfoDTO == null){
-            return ResponseEntity.badRequest().body("User is not found");
+        try {
+            String token = authHeader.substring(7);
+            if (tokenBlacklistService.isTokenInvalid(token)) {
+                return ResponseEntity.status(HttpServletResponse.SC_UNAUTHORIZED).body("Token is invalid.");
+            }
+            Claims claims = jwtTokenUtil.decodeJwt(token);
+            UserInfoDTO userInfoDTO = userDetailsService.getUserInformation(claims);
+            if (userInfoDTO == null){
+                return ResponseEntity.badRequest().body("User is not found");
+            } else {
+                return ResponseEntity.ok(userInfoDTO);
+            }
         }
-        else {
-            return ResponseEntity.ok(userInfoDTO);
+        catch (Exception e){
+            System.out.println(e);
+            return ResponseEntity.badRequest().body("Something went wrong");
         }
+
         //return "Hello, " + username + ". Your user id is: " + userId + " and your role is: " + role;
     }
 
-    @PostMapping("/logout")
-    public ResponseEntity<?> logout() {
-        // Дополнительные операции при выходе пользователя, если необходимо
-        return ResponseEntity.ok().build();
+    @GetMapping("/logout")
+    public ResponseEntity<?> logout(@RequestHeader("Authorization") String authHeader) {
+        String token = authHeader.substring(7);
+        tokenBlacklistService.invalidateToken(token);
+        System.out.println(token);
+        return ResponseEntity.ok("Logged out successfully");
     }
 }

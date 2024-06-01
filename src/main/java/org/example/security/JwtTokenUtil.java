@@ -20,7 +20,7 @@ public class JwtTokenUtil {
     @Value("${jwt.secret}")
     private String SECRET_KEY;
 
-    public static final long JWT_TOKEN_VALIDITY = 1000 * 60 * 60; // 7 days
+    public static final long JWT_TOKEN_VALIDITY = 1000 * 60 * 60; // 1 hour
 
     private Key getSignInKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
