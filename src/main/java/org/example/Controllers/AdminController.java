@@ -9,6 +9,7 @@ import org.example.services.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/admin")
+@PreAuthorize("hasRole('Admin')")
 public class AdminController {
     @Autowired
     private AdminService adminService;
@@ -72,6 +74,7 @@ public class AdminController {
     }
 
     @GetMapping("/lecturers")
+    @PreAuthorize("hasRole('ROLE_Admin')")
     public ResponseEntity<List<LecturerDTO>> getAllLecturers() {
         List<LecturerDTO> lecturers = adminService.getAllLecturers();
         return ResponseEntity.ok(lecturers);
