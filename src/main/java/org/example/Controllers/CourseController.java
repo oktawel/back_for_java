@@ -8,6 +8,7 @@ import org.example.models.forms.*;
 import org.example.services.AdminService;
 import org.example.services.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,40 +24,66 @@ public class CourseController {
 
 
     @GetMapping("/courses")
-    public ResponseEntity<List<CourseDTO>> getAllCourses() {
+    public ResponseEntity<?> getAllCourses() {
         List<CourseDTO> courses = courseService.getAllCourses();
-        return ResponseEntity.ok(courses);
+        if (courses == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Courses not found");
+        }
+        else{
+            return ResponseEntity.ok(courses);
+        }
     }
 
     @GetMapping("/course/{id}")
-    public ResponseEntity<CourseDTO> getCourseById(@PathVariable Long id) {
-        CourseDTO courses = courseService.getCourseById(id);
-        return ResponseEntity.ok(courses);
+    public ResponseEntity<?> getCourseById(@PathVariable Long id) {
+        CourseDTO course = courseService.getCourseById(id);
+        if (course == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Course not found");
+        }
+        else{
+            return ResponseEntity.ok(course);
+        }
     }
 
     @PostMapping(value = "/course/add", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<String> AddCoursePage(@RequestBody AddFormCourse form){
-        courseService.create_updateCourse(form);
-        return  ResponseEntity.ok("Successfully");
+        if (courseService.create_updateCourse(form)) {
+            return  ResponseEntity.ok("Successfully");
+        }
+        else {
+            return  ResponseEntity.badRequest().body("Error adding");
+        }
     }
 
     @GetMapping(value = "/course/{courseId}/connectGroup/{groupId}")
     public ResponseEntity<String> ConnectGroupCoursePage(@PathVariable Long courseId, @PathVariable Long groupId){
-        courseService.addGroupToCourse(courseId, groupId);
-        return  ResponseEntity.ok("Successfully");
+        if (courseService.addGroupToCourse(courseId, groupId)) {
+            return  ResponseEntity.ok("Successfully");
+        }
+        else {
+            return  ResponseEntity.badRequest().body("Error open course");
+        }
     }
     @GetMapping(value = "/course/{courseId}/removeConnect/{groupId}")
     public ResponseEntity<String> RemoveConnectGroupCoursePage(@PathVariable Long courseId, @PathVariable Long groupId){
-        courseService.removeGroupFromCourse(courseId, groupId);
-        return  ResponseEntity.ok("Successfully");
+        if (courseService.removeGroupFromCourse(courseId, groupId)) {
+            return  ResponseEntity.ok("Successfully");
+        }
+        else {
+            return  ResponseEntity.badRequest().body("Error close course");
+        }
     }
 
     @PostMapping(value = "/course/update", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<String> UpdateCoursePage(@RequestBody AddFormCourse form){
-        courseService.create_updateCourse(form);
-        return  ResponseEntity.ok("Successfully");
+        if (courseService.create_updateCourse(form)) {
+            return  ResponseEntity.ok("Successfully");
+        }
+        else {
+            return  ResponseEntity.badRequest().body("Error update");
+        }
     }
 
     @DeleteMapping("/course/delete/{id}")

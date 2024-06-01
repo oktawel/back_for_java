@@ -25,6 +25,7 @@ public class FreeOptionServiceImpl implements FreeOptionService{
                 return false;
             }
         } catch (Exception e) {
+            System.out.println(e);
             return false;
         }
     }
@@ -38,6 +39,7 @@ public class FreeOptionServiceImpl implements FreeOptionService{
             freeOptionRepository.save(option);
             return true;
         }catch (Exception e){
+            System.out.println(e);
             return false;
         }
     }

@@ -75,6 +75,7 @@ public class AdminServiceImpl implements AdminService{
             lecturerRepository.save(lecturer);
             return false;
         } catch (Exception e) {
+            System.out.println(e);
             return true;
         }
     }
@@ -84,6 +85,7 @@ public class AdminServiceImpl implements AdminService{
             groupRepository.save(grooup);
             return false;
         } catch (Exception e) {
+            System.out.println(e);
             return true;
         }
     }
@@ -93,6 +95,7 @@ public class AdminServiceImpl implements AdminService{
             studentRepository.save(student);
             return false;
         } catch (Exception e) {
+            System.out.println(e);
             return true;
         }
     }
@@ -154,6 +157,7 @@ public class AdminServiceImpl implements AdminService{
                 user = updateUser(lecturerRepository.findById(id).get().getUser().getId() ,login, password, role.get());
             }
             catch (Exception e){
+                System.out.println(e);
                 return false;
             }
         }
@@ -162,6 +166,7 @@ public class AdminServiceImpl implements AdminService{
                 user = saveUser(login, password, role.get());
             }
             catch (Exception e){
+                System.out.println(e);
                 return false;
             }
         }
@@ -190,6 +195,7 @@ public class AdminServiceImpl implements AdminService{
             lecturerRepository.deleteById(id);
             return true;
         } catch (Exception e) {
+            System.out.println(e);
             return false;
         }
     }
@@ -235,6 +241,7 @@ public class AdminServiceImpl implements AdminService{
                 return false;
             }
         } catch (Exception e) {
+            System.out.println(e);
             return false;
         }
     }
@@ -272,6 +279,7 @@ public class AdminServiceImpl implements AdminService{
                 user = updateUser(studentRepository.findById(id).get().getUser().getId() ,login, password, role.get());
             }
             catch (Exception e){
+                System.out.println(e);
                 return false;
             }
         }
@@ -280,6 +288,7 @@ public class AdminServiceImpl implements AdminService{
                 user = saveUser(login, password, role.get());
             }
             catch (Exception e){
+                System.out.println(e);
                 return false;
             }
         }
@@ -303,6 +312,7 @@ public class AdminServiceImpl implements AdminService{
             studentRepository.deleteById(id);
             return true;
         } catch (Exception e) {
+            System.out.println(e);
             return false;
         }
     }

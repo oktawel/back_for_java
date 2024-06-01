@@ -83,38 +83,62 @@ public class AdminController {
     @PostMapping(value = "/group/add", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<String> AddGroupPage(@RequestBody AddFormGrooup form){
-        adminService.create_updateGrooup(form);
-        return  ResponseEntity.ok("Successfully");
+        if (adminService.create_updateGrooup(form)) {
+            return  ResponseEntity.ok("Successfully");
+        }
+        else {
+            return  ResponseEntity.badRequest().body("Error add group");
+        }
     }
     @PostMapping(value = "/student/add", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<String> AddStudentPage(@RequestBody AddFormStudent form){
-        adminService.create_updateStudent(form);
-        return  ResponseEntity.ok("Successfully");
+        if (adminService.create_updateStudent(form)) {
+            return  ResponseEntity.ok("Successfully");
+        }
+        else {
+            return  ResponseEntity.badRequest().body("Error add student");
+        }
     }
     @PostMapping(value = "/lecturer/add", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<String> AddLecturerPage(@RequestBody AddFormLecturer form){
-        adminService.create_updateLecturer(form);
-        return  ResponseEntity.ok("Successfully");
+        if (adminService.create_updateLecturer(form)) {
+            return  ResponseEntity.ok("Successfully");
+        }
+        else {
+            return  ResponseEntity.badRequest().body("Error add lecturer");
+        }
     }
     @PostMapping(value = "/group/update", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<String> UpdateGroupPage(@RequestBody AddFormGrooup form){
-        adminService.create_updateGrooup(form);
-        return  ResponseEntity.ok("Successfully");
+        if (adminService.create_updateGrooup(form)) {
+            return  ResponseEntity.ok("Successfully");
+        }
+        else {
+            return  ResponseEntity.badRequest().body("Error update group");
+        }
     }
     @PostMapping(value = "/student/update", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<String> UpdateStudentPage(@RequestBody AddFormStudent form){
-        adminService.create_updateStudent(form);
-        return  ResponseEntity.ok("Successfully");
+        if (adminService.create_updateStudent(form)) {
+            return  ResponseEntity.ok("Successfully");
+        }
+        else {
+            return  ResponseEntity.badRequest().body("Error update student");
+        }
     }
     @PostMapping(value = "/lecturer/update", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<String> UpdateLecturerPage(@RequestBody AddFormLecturer form){
-        adminService.create_updateLecturer(form);
-        return  ResponseEntity.ok("Successfully");
+        if (adminService.create_updateLecturer(form)) {
+            return  ResponseEntity.ok("Successfully");
+        }
+        else {
+            return  ResponseEntity.badRequest().body("Error update lecturer");
+        }
     }
     @DeleteMapping("/group/delete/{id}")
     public ResponseEntity<String> deleteGroup(@PathVariable Long id) {
@@ -142,19 +166,34 @@ public class AdminController {
     }
 
     @GetMapping("/group/{id}")
-    public ResponseEntity<GroupDTO> getGroupById(@PathVariable Long id) {
+    public ResponseEntity<?> getGroupById(@PathVariable Long id) {
         GroupDTO group = adminService.getGrooupById(id);
-        return ResponseEntity.ok(group);
+        if (group == null){
+            return ResponseEntity.ok("Group with id:" + id + " not found");
+        }
+        else {
+            return ResponseEntity.ok(group);
+        }
     }
     @GetMapping("/student/{id}")
-    public ResponseEntity<StudentDTO> getStudentById(@PathVariable Long id) {
+    public ResponseEntity<?> getStudentById(@PathVariable Long id) {
         StudentDTO student = adminService.getStudentById(id);
-        return ResponseEntity.ok(student);
+        if (student == null){
+            return ResponseEntity.ok("Student with id:" + id + " not found");
+        }
+        else {
+            return ResponseEntity.ok(student);
+        }
 
     }
     @GetMapping("/lecturer/{id}")
-    public ResponseEntity<LecturerDTO> getLecturerById(@PathVariable Long id) {
+    public ResponseEntity<?> getLecturerById(@PathVariable Long id) {
         LecturerDTO lecturer = adminService.getLecturerById(id);
-        return ResponseEntity.ok(lecturer);
+        if (lecturer == null){
+            return ResponseEntity.ok("Lecturer with id:" + id + " not found");
+        }
+        else {
+            return ResponseEntity.ok(lecturer);
+        }
     }
 }

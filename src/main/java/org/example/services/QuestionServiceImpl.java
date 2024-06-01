@@ -30,20 +30,25 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public List<QuestionDTO> getQuestionsByTestId(Long testId) {
-        System.out.println("Question");
         List<QuestionDTO> questionDTOS = new ArrayList<>();
         List<Question> questions = questionRepository.findByTestId(testId);
-        for (Question question : questions){
-            QuestionDTO questionDTO = new QuestionDTO();
-            questionDTO.setId(question.getId());
-            questionDTO.setTypeQuestionID(question.getType().getId());
-            questionDTO.setTestId(question.getTest().getId());
-            questionDTO.setText(question.getText());
-            questionDTO.setCost(question.getCost());
-            questionDTO.setOptions(optionService.getOptionsByQuestionId(question.getType().getId(), question.getId()));
-            questionDTOS.add(questionDTO);
+        try {
+            for (Question question : questions){
+                QuestionDTO questionDTO = new QuestionDTO();
+                questionDTO.setId(question.getId());
+                questionDTO.setTypeQuestionID(question.getType().getId());
+                questionDTO.setTestId(question.getTest().getId());
+                questionDTO.setText(question.getText());
+                questionDTO.setCost(question.getCost());
+                questionDTO.setOptions(optionService.getOptionsByQuestionId(question.getType().getId(), question.getId()));
+                questionDTOS.add(questionDTO);
+            }
+            return questionDTOS;
         }
-        return questionDTOS;
+        catch (Exception e){
+            System.out.println(e);
+            return null;
+        }
     }
 
     @Override
@@ -62,17 +67,16 @@ public class QuestionServiceImpl implements QuestionService {
                         question.setId(questionForm.getId());
                     }
                     Long qiestionId = questionRepository.saveAndReturnId(question);
-                    System.out.println("Question add");
                     optionService.addOptions(qiestionId, questionForm.getAddFormOptionList());
                 }
                 else {
                     return false;
                 }
             }
-
             return true;
         }
         catch (Exception e){
+            System.out.println(e);
             return false;
         }
     }
@@ -111,13 +115,14 @@ public class QuestionServiceImpl implements QuestionService {
             return points;
         }
         catch (Exception e){
+            System.out.println(e);
             return 0;
         }
     }
 
     @Override
     public double getQuestionPoints (AddFormAnswerQuestion answerQuestion){
-        //Не реализовано
+        //Не требуется
         return 0.0;
     }
 }

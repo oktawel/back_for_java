@@ -55,6 +55,7 @@ public class TestServiceImpl implements TestService {
             }
             return true;
         } catch (Exception e) {
+            System.out.println(e);
             return false;
         }
     }
@@ -168,6 +169,7 @@ public class TestServiceImpl implements TestService {
             return true;
         }
         catch (Exception e){
+            System.out.println(e);
             return false;
         }
     }

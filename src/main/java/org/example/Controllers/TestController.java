@@ -25,20 +25,28 @@ public class TestController {
     private TestService testService;
 
     @GetMapping("/tests")
-    public ResponseEntity<List<TestDTO>> getAllTests() {
+    public ResponseEntity<?> getAllTests() {
         List<TestDTO> tests = testService.getAllTests();
-        return ResponseEntity.ok(tests);
+        if (tests == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tests not found");
+        }
+        else{
+            return ResponseEntity.ok(tests);
+        }
     }
 
     @GetMapping("/test/{id}")
-    public ResponseEntity<TestDTO> getTestById(@PathVariable Long id) {
+    public ResponseEntity<?> getTestById(@PathVariable Long id) {
         TestDTO test = testService.getTestById(id);
-        return ResponseEntity.ok(test);
+        if (test == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Test not found");
+        }
+        else{
+            return ResponseEntity.ok(test);
+        }
     }
     @GetMapping("/test/open/{id}")
     public ResponseEntity<?> getOpenTestById(@PathVariable Long id) {
-//        TestOpenDTO test = testService.getOpenTestById(id);
-//        return ResponseEntity.ok(test);
         TestOpenDTO test = testService.getOpenTestById(id);
         if (test != null) {
             return ResponseEntity.ok(test);
@@ -47,27 +55,37 @@ public class TestController {
         }
     }
     @GetMapping("/testsByCourse/{subjectId}")
-    public ResponseEntity<List<TestDTO>> getTestsBySubjectId(@PathVariable Long subjectId) {
+    public ResponseEntity<?> getTestsBySubjectId(@PathVariable Long subjectId) {
         List<TestDTO> tests = testService.getTestsBySubjectId(subjectId);
-        if (tests.isEmpty()) {
-            return ResponseEntity.noContent().build();
+        if (tests == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tests not found");
         }
-        return ResponseEntity.ok(tests);
+        else{
+            return ResponseEntity.ok(tests);
+        }
     }
 
     @PostMapping(value = "/test/add", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<String> AddTestPage(@RequestBody AddFormTest form){
         System.out.println("Start");
-        testService.create_updateTest(form);
-        return  ResponseEntity.ok("Successfully");
+        if (testService.create_updateTest(form)) {
+            return  ResponseEntity.ok("Successfully");
+        }
+        else {
+            return  ResponseEntity.badRequest().body("Error adding");
+        }
     }
 
     @PostMapping(value = "/test/update", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<String> UpdateTestPage(@RequestBody AddFormTest form){
-        testService.create_updateTest(form);
-        return  ResponseEntity.ok("Successfully");
+        if (testService.create_updateTest(form)) {
+            return  ResponseEntity.ok("Successfully");
+        }
+        else {
+            return  ResponseEntity.badRequest().body("Update error");
+        }
     }
 
     @DeleteMapping("/test/delete/{id}")
@@ -82,8 +100,12 @@ public class TestController {
     @PostMapping(value = "/test/answer", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<String> AnswerTestPage(@RequestBody AddFormAnswerTest form){
-        testService.addAnswer(form);
-        return  ResponseEntity.ok("Successfully");
+        if (testService.addAnswer(form)) {
+            return  ResponseEntity.ok("Successfully");
+        }
+        else {
+            return  ResponseEntity.badRequest().body("Error adding answers");
+        }
     }
 
 }

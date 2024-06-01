@@ -32,6 +32,7 @@ public class TFOptionServiceImpl implements TFOptionService{
                 return false;
             }
         } catch (Exception e) {
+            System.out.println(e);
             return false;
         }
     }
@@ -49,6 +50,7 @@ public class TFOptionServiceImpl implements TFOptionService{
             optionTFQuestionRepository.save(option);
             return true;
         }catch (Exception e){
+            System.out.println(e);
             return false;
         }
     }

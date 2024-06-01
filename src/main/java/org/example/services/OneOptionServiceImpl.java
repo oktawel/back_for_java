@@ -28,6 +28,7 @@ public class OneOptionServiceImpl implements OneOptionService{
                 return false;
             }
         } catch (Exception e) {
+            System.out.println(e);
             return false;
         }
     }
@@ -41,6 +42,7 @@ public class OneOptionServiceImpl implements OneOptionService{
             oneOptionRepository.save(option);
             return true;
         }catch (Exception e){
+            System.out.println(e);
             return false;
         }
     }

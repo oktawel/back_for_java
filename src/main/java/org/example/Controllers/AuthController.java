@@ -32,65 +32,44 @@ public class AuthController {
     @PostMapping("/authenticate")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest){
         try {
-            System.out.println("ВОТ ТУТ ВСЁ ПЛОХО 0");
+//            System.out.println("ВОТ ТУТ ВСЁ ПЛОХО 0");
             final Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword())
             );
-            System.out.println("ВОТ ТУТ ВСЁ ПЛОХО 1");
+//            System.out.println("ВОТ ТУТ ВСЁ ПЛОХО 1");
             final CustomUserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
-            System.out.println("ВОТ ТУТ ВСЁ ПЛОХО 2");
+//            System.out.println("ВОТ ТУТ ВСЁ ПЛОХО 2");
             final String token = jwtTokenUtil.generateToken(userDetails);
             return ResponseEntity.ok(new AuthenticationResponse(token));
         }
         catch (BadCredentialsException ex){
             System.out.println(ex);
-            return ResponseEntity.ok("Неверные данные пользователя");
+            return ResponseEntity.badRequest().body("Invalid user data");
         }
         catch (Exception ex){
             System.out.println(ex);
-            return ResponseEntity.ok("Что-то пошло не так");
+            return ResponseEntity.badRequest().body("Something went wrong");
         }
     }
 
     @GetMapping("/validate")
-    public String validateToken(@RequestHeader("Authorization") String authHeader) {
+    public ResponseEntity<String> validateToken(@RequestHeader("Authorization") String authHeader) {
         String token = authHeader.substring(7);
         Claims claims = jwtTokenUtil.decodeJwt(token);
-        return "Token is valid. User: " + claims.getSubject();
+        return ResponseEntity.ok("Token is valid.");
     }
 
     @GetMapping("/user")
     public ResponseEntity<?> getUser(@RequestHeader("Authorization") String authHeader) {
         String token = authHeader.substring(7);
         Claims claims = jwtTokenUtil.decodeJwt(token);
-        String username = claims.getSubject();
-        Integer userId = (Integer) claims.get("userId");
-        String role = (String) claims.get("role");
-
-        UserInfoDTO userInfoDTO = new UserInfoDTO();
-        userInfoDTO.setId(userId.longValue());
-        userInfoDTO.setLogin(username);
-        userInfoDTO.setRole(role);
-        switch (role){
-            case ("Admin"):{
-                userInfoDTO.setName(null);
-                userInfoDTO.setSurname(null);
-                break;
-            }
-            case ("Lector"):{
-                Lecturer lecturer = userDetailsService.findLecturerByUserId(userId);
-                userInfoDTO.setName(lecturer.getName());
-                userInfoDTO.setSurname(lecturer.getSurname());
-                break;
-            }
-            case ("Student"):{
-                Student student = userDetailsService.findStudentByUserId(userId);
-                userInfoDTO.setName(student.getName());
-                userInfoDTO.setSurname(student.getSurname());
-                break;
-            }
+        UserInfoDTO userInfoDTO = userDetailsService.getUserInformation(claims);
+        if (userInfoDTO == null){
+            return ResponseEntity.badRequest().body("User is not found");
         }
-        return ResponseEntity.ok(userInfoDTO);
+        else {
+            return ResponseEntity.ok(userInfoDTO);
+        }
         //return "Hello, " + username + ". Your user id is: " + userId + " and your role is: " + role;
     }
 

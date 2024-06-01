@@ -36,59 +36,52 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public boolean create_updateCourse(AddFormCourse form){
-        Subject subject = new Subject();
-        Long id;
+        try {
+            Subject subject = new Subject();
+            Long id;
 
-        if(form.getId() != null){
-            id = form.getId();
-            subject.setId(id);
-            subject.setGroups(courseRepository.findById(id).get().getGroups());
+            if(form.getId() != null){
+                id = form.getId();
+                subject.setId(id);
+                subject.setGroups(courseRepository.findById(id).get().getGroups());
+            }
+
+            subject.setName(form.getName());
+            subject.setDescription(form.getDescription());
+            subject.setLecturer(lecturerRepository.findById(form.getLecturerId()).get());
+
+            if (saveCourse(subject)) {
+                return false;
+            }
+            return true;
         }
-
-        subject.setName(form.getName());
-        subject.setDescription(form.getDescription());
-        subject.setLecturer(lecturerRepository.findById(form.getLecturerId()).get());
-
-        if (saveCourse(subject)) {
+        catch (Exception e){
+            System.out.println(e);
             return false;
         }
-        return true;
     }
-
-    public boolean updateCourse(UpdateFormCourse form){
-        Subject subject = new Subject();
-        subject.setId(form.getId());
-        subject.setName(form.getName());
-        subject.setDescription(form.getDescription());
-        subject.setLecturer(lecturerRepository.findById(form.getLecturerId()).get());
-        subject.setGroups(courseRepository.findById(form.getId()).get().getGroups());
-        if (saveCourse(subject)) {
-            return false;
-        }
-        return true;
-    }
-
-
 
     @Override
     public boolean addGroupToCourse(Long courseId, Long groupId) {
-        Subject course = courseRepository.findById(courseId)
+        try {
+            Subject course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new RuntimeException("Course not found"));
 
-        Grooup group = groupRepository.findById(groupId)
+            Grooup group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new RuntimeException("Group not found"));
 
-        course.getGroups().add(group);
-        try {
+            course.getGroups().add(group);
             courseRepository.save(course);
-            return false;
-        } catch (Exception e) {
             return true;
+        } catch (Exception e) {
+            System.out.println(e);
+            return false;
         }
     }
 
     @Override
     public boolean removeGroupFromCourse(Long courseId, Long groupId) {
+        try {
         Subject course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new RuntimeException("Course not found"));
 
@@ -96,11 +89,12 @@ public class CourseServiceImpl implements CourseService {
                 .orElseThrow(() -> new RuntimeException("Group not found"));
 
         course.getGroups().remove(group);
-        try {
+
             courseRepository.save(course);
-            return false;
-        } catch (Exception e) {
             return true;
+        } catch (Exception e) {
+            System.out.println(e);
+            return false;
         }
     }
 
@@ -125,6 +119,7 @@ public class CourseServiceImpl implements CourseService {
                 return false;
             }
         } catch (Exception e) {
+            System.out.println(e);
             return false;
         }
     }
@@ -143,6 +138,7 @@ public class CourseServiceImpl implements CourseService {
             courseRepository.save(subject);
             return false;
         } catch (Exception e) {
+            System.out.println(e);
             return true;
         }
     }
@@ -164,7 +160,6 @@ public class CourseServiceImpl implements CourseService {
                 .map(this::convertToGroupDTO)
                 .collect(Collectors.toSet());
         dto.setGroups(groupDTOs);
-
         return dto;
     }
 

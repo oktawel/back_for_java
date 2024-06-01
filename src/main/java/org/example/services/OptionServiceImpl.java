@@ -35,62 +35,68 @@ public class OptionServiceImpl implements OptionService{
     @Override
     public List<OptionDTO> getOptionsByQuestionId(Long typeQuestionId, Long questiontId) {
         List<OptionDTO> optionDTOS = new ArrayList<>();
-
-
-        switch (typeQuestionId.intValue()){
-            case (2):{
-                List<OneOption> options = oneOptionService.findByQuestionId(questiontId);
-                if (options.isEmpty()){
-                    return null;
-                }
-                for (OneOption oneOption : options){
-                    OptionDTO optionDTO = new OptionDTO();
-                    optionDTO.setId(oneOption.getId());
-                    optionDTO.setQuestionId(oneOption.getQuestion().getId());
-                    optionDTO.setText(oneOption.getText());
-                    optionDTO.setCorrect(oneOption.isCorrect());
-                    optionDTOS.add(optionDTO);
-                }
-                break;
-            }
-            case (3):{
-                List<ManyOption> options = manyOptionService.findByQuestionId(questiontId);
-                if (options.isEmpty()){
-                    return null;
-                }
-                for (ManyOption manyOption : options){
-                    OptionDTO optionDTO = new OptionDTO();
-                    optionDTO.setId(manyOption.getId());
-                    optionDTO.setQuestionId(manyOption.getQuestion().getId());
-                    optionDTO.setText(manyOption.getText());
-                    optionDTO.setCorrect(manyOption.isCorrect());
-                    optionDTOS.add(optionDTO);
-                }
-                break;
-            }
-            case (4): {
-                List<OptionTF_Question> connects = tfOptionService.getAllConnects();
-                if (connects.isEmpty()) {
-                    return null;
-                }
-                for (OptionTF_Question connect : connects) {
-                    if (connect.getQuestion().getId().equals(questiontId)) {
+        try {
+            switch (typeQuestionId.intValue()){
+                case (2):{
+                    List<OneOption> options = oneOptionService.findByQuestionId(questiontId);
+                    if (options.isEmpty()){
+                        return null;
+                    }
+                    for (OneOption oneOption : options){
                         OptionDTO optionDTO = new OptionDTO();
-                        optionDTO.setId(connect.getTfOption().getId());
-                        optionDTO.setQuestionId(connect.getQuestion().getId());
-                        optionDTO.setText(connect.getTfOption().getText());
-                        optionDTO.setCorrect(connect.getTfOption().isCorrect());
+                        optionDTO.setId(oneOption.getId());
+                        optionDTO.setQuestionId(oneOption.getQuestion().getId());
+                        optionDTO.setText(oneOption.getText());
+                        optionDTO.setCorrect(oneOption.isCorrect());
                         optionDTOS.add(optionDTO);
                     }
+                    break;
                 }
-                break;
+                case (3):{
+                    List<ManyOption> options = manyOptionService.findByQuestionId(questiontId);
+                    if (options.isEmpty()){
+                        return null;
+                    }
+                    for (ManyOption manyOption : options){
+                        OptionDTO optionDTO = new OptionDTO();
+                        optionDTO.setId(manyOption.getId());
+                        optionDTO.setQuestionId(manyOption.getQuestion().getId());
+                        optionDTO.setText(manyOption.getText());
+                        optionDTO.setCorrect(manyOption.isCorrect());
+                        optionDTOS.add(optionDTO);
+                    }
+                    break;
+                }
+                case (4): {
+                    List<OptionTF_Question> connects = tfOptionService.getAllConnects();
+                    if (connects.isEmpty()) {
+                        return null;
+                    }
+                    for (OptionTF_Question connect : connects) {
+                        if (connect.getQuestion().getId().equals(questiontId)) {
+                            OptionDTO optionDTO = new OptionDTO();
+                            optionDTO.setId(connect.getTfOption().getId());
+                            optionDTO.setQuestionId(connect.getQuestion().getId());
+                            optionDTO.setText(connect.getTfOption().getText());
+                            optionDTO.setCorrect(connect.getTfOption().isCorrect());
+                            optionDTOS.add(optionDTO);
+                        }
+                    }
+                    break;
+                }
+                default:
+                {
+                    return null;
+                }
             }
-            default:
-            {
-                return null;
-            }
+            return optionDTOS;
         }
-        return optionDTOS;
+        catch (Exception e){
+            System.out.println(e);
+            return null;
+        }
+
+
     }
     @Override
     public boolean addOptions(Long questionId, List<AddFormOption> options){
@@ -152,10 +158,10 @@ public class OptionServiceImpl implements OptionService{
                     return false;
                 }
             }
-            System.out.println("Option add");
             return true;
         }
         catch (Exception e){
+            System.out.println(e);
             return false;
         }
     }
@@ -198,6 +204,7 @@ public class OptionServiceImpl implements OptionService{
             return true;
         }
         catch (Exception e){
+            System.out.println(e);
             return false;
         }
     }
@@ -287,6 +294,7 @@ public class OptionServiceImpl implements OptionService{
             return point;
         }
         catch (Exception e){
+            System.out.println(e);
             return 0;
         }
     }

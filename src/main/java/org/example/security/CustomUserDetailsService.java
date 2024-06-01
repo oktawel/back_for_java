@@ -1,6 +1,8 @@
 package org.example.security;
 
+import io.jsonwebtoken.Claims;
 import org.example.models.DTO.UserDTO;
+import org.example.models.DTO.UserInfoDTO;
 import org.example.models.Lecturer;
 import org.example.models.Role;
 import org.example.models.Student;
@@ -24,11 +26,42 @@ public class CustomUserDetailsService implements UserDetailsService {
         this.roleRepository = roleRepository;
     }
 
-    public Lecturer findLecturerByUserId(Integer id) {
-        return userService.findLecturerByUserId(id.longValue());
-    }
-    public Student findStudentByUserId(Integer id) {
-        return userService.findStudentByUserId(id.longValue());
+    public UserInfoDTO getUserInformation(Claims claims){
+        try {
+            String username = claims.getSubject();
+            Integer userId = (Integer) claims.get("userId");
+            String role = (String) claims.get("role");
+
+            UserInfoDTO userInfoDTO = new UserInfoDTO();
+            userInfoDTO.setId(userId.longValue());
+            userInfoDTO.setLogin(username);
+            userInfoDTO.setRole(role);
+            switch (role){
+                case ("Admin"):{
+                    userInfoDTO.setName(null);
+                    userInfoDTO.setSurname(null);
+                    break;
+                }
+                case ("Lector"):{
+                    Lecturer lecturer = userService.findLecturerByUserId(userId.longValue());
+                    userInfoDTO.setName(lecturer.getName());
+                    userInfoDTO.setSurname(lecturer.getSurname());
+                    break;
+                }
+                case ("Student"):{
+                    Student student = userService.findStudentByUserId(userId.longValue());
+                    userInfoDTO.setName(student.getName());
+                    userInfoDTO.setSurname(student.getSurname());
+                    break;
+                }
+            }
+
+            return userInfoDTO;
+        }
+        catch (Exception ex){
+            System.out.println(ex);
+            return null;
+        }
     }
 
     @Override
