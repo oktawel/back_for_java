@@ -10,11 +10,10 @@ import java.util.Optional;
 
 public interface TestService {
     boolean create_updateTest(AddFormTest form);
-    boolean updateTest(AddFormTest form);
     boolean deleteTest(Long id);
-    TestDTO getTestById(Long id);
-    List<TestDTO> getAllTests();
-    List<TestDTO> getTestsBySubjectId(Long subjectId);
+    TestDTO getTestById(Long studentId, Long id);
+    List<TestDTO> getAllTests(Long studentId);
+    List<TestDTO> getTestsBySubjectId(Long studentId, Long subjectId);
     TestOpenDTO getOpenTestById(Long id);
     boolean addAnswer(AddFormAnswerTest test);
     boolean deleteRestultTest (Long studentId);

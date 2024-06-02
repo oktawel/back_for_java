@@ -33,23 +33,26 @@ public class CustomUserDetailsService implements UserDetailsService {
             String role = (String) claims.get("role");
 
             UserInfoDTO userInfoDTO = new UserInfoDTO();
-            userInfoDTO.setId(userId.longValue());
+            userInfoDTO.setUserId(userId.longValue());
             userInfoDTO.setLogin(username);
             userInfoDTO.setRole(role);
             switch (role){
                 case ("Admin"):{
+                    userInfoDTO.setId(null);
                     userInfoDTO.setName(null);
                     userInfoDTO.setSurname(null);
                     break;
                 }
                 case ("Lector"):{
                     Lecturer lecturer = userService.findLecturerByUserId(userId.longValue());
+                    userInfoDTO.setId(lecturer.getId());
                     userInfoDTO.setName(lecturer.getName());
                     userInfoDTO.setSurname(lecturer.getSurname());
                     break;
                 }
                 case ("Student"):{
                     Student student = userService.findStudentByUserId(userId.longValue());
+                    userInfoDTO.setId(student.getId());
                     userInfoDTO.setName(student.getName());
                     userInfoDTO.setSurname(student.getSurname());
                     break;

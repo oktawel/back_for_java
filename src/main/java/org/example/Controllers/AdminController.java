@@ -74,9 +74,7 @@ public class AdminController {
 
     @GetMapping("/lecturers")
     public ResponseEntity<List<LecturerDTO>> getAllLecturers() {
-        System.out.println("Z");
         List<LecturerDTO> lecturers = adminService.getAllLecturers();
-        System.out.println("Z");
         return ResponseEntity.ok(lecturers);
     }
 

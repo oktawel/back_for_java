@@ -25,8 +25,8 @@ public class TestController {
     private TestService testService;
 
     @GetMapping("/tests")
-    public ResponseEntity<?> getAllTests() {
-        List<TestDTO> tests = testService.getAllTests();
+    public ResponseEntity<?> getAllTests(@RequestParam Long studentId) {
+        List<TestDTO> tests = testService.getAllTests(studentId);
         if (tests == null){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tests not found");
         }
@@ -36,8 +36,8 @@ public class TestController {
     }
 
     @GetMapping("/test/{id}")
-    public ResponseEntity<?> getTestById(@PathVariable Long id) {
-        TestDTO test = testService.getTestById(id);
+    public ResponseEntity<?> getTestById(@RequestParam Long studentId, @PathVariable Long id) {
+        TestDTO test = testService.getTestById(studentId, id);
         if (test == null){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Test not found");
         }
@@ -53,16 +53,16 @@ public class TestController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The test is not available");
         }
-    }
-    @GetMapping("/testsByCourse/{subjectId}")
-    public ResponseEntity<?> getTestsBySubjectId(@PathVariable Long subjectId) {
-        List<TestDTO> tests = testService.getTestsBySubjectId(subjectId);
+    }    @GetMapping("/testsByCourse/{subjectId}")
+    public ResponseEntity<?> getTestsBySubjectId(@RequestParam Long studentId, @PathVariable Long subjectId) {
+        List<TestDTO> tests = testService.getTestsBySubjectId(studentId, subjectId);
         if (tests == null){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tests not found");
         }
         else{
             return ResponseEntity.ok(tests);
         }
+
     }
 
     @PostMapping(value = "/test/add", consumes = MediaType.APPLICATION_JSON_VALUE)

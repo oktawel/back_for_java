@@ -2,11 +2,20 @@ package org.example.models.DTO;
 
 public class UserInfoDTO {
 
-    private Long id;
+    private Long userId;
     private String login;
     private String role;
+    private Long id;
     private String name;
     private String surname;
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
 
     public Long getId() {
         return id;

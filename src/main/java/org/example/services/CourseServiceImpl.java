@@ -109,7 +109,7 @@ public class CourseServiceImpl implements CourseService {
                     group.getSubjects().remove(course);
                     groupRepository.save(group);
                 }
-                List<TestDTO> tests = testService.getTestsBySubjectId(id);
+                List<TestDTO> tests = testService.getTestsBySubjectId(1L, id);
                 for (TestDTO test : tests) {
                     testService.deleteTest(test.getId());
                 }

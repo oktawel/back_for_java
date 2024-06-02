@@ -30,9 +30,9 @@ public class TestServiceImpl implements TestService {
     @Autowired
     private OptionService optionService;
     @Override
-    public List<TestDTO> getTestsBySubjectId(Long subjectId) {
+    public List<TestDTO> getTestsBySubjectId(Long studentId, Long subjectId) {
         List<Test> tests = testRepository.findBySubjectId(subjectId);
-        return initializeTestDTOs(1L,tests);
+        return initializeTestDTOs(studentId,tests);
     }
 
     @Override
@@ -59,22 +59,22 @@ public class TestServiceImpl implements TestService {
             return false;
         }
     }
-    @Override
-    public boolean updateTest(AddFormTest form){
-        try {
-            Test test = new Test();
-            test.setId(form.getId());
-            test.setName(form.getName());
-            test.setDescription(form.getDescription());
-            test.setOpen(form.isOpen());
-            test.setSubject(courseRepository.findById(form.getSubjectId()).get());
-            saveTest(test);
-            return true;
-        } catch (Exception e) {
-            System.out.println(e);
-            return false;
-        }
-    }
+//    @Override
+//    public boolean updateTest(AddFormTest form){
+//        try {
+//            Test test = new Test();
+//            test.setId(form.getId());
+//            test.setName(form.getName());
+//            test.setDescription(form.getDescription());
+//            test.setOpen(form.isOpen());
+//            test.setSubject(courseRepository.findById(form.getSubjectId()).get());
+//            saveTest(test);
+//            return true;
+//        } catch (Exception e) {
+//            System.out.println(e);
+//            return false;
+//        }
+//    }
     @Override
     public boolean deleteTest(Long id){
         try {
@@ -97,13 +97,13 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public TestDTO getTestById(Long id){
-        return initializeTestDTO(1L, testRepository.findById(id).get());
+    public TestDTO getTestById(Long studentId, Long id){
+        return initializeTestDTO(studentId, testRepository.findById(id).get());
     }
     @Override
-    public List<TestDTO> getAllTests(){
+    public List<TestDTO> getAllTests(Long studentId){
         List<Test> tests = testRepository.findAll();
-        return initializeTestDTOs(1L, tests);
+        return initializeTestDTOs(studentId, tests);
     }
     @Override
     public TestOpenDTO getOpenTestById(Long id){
