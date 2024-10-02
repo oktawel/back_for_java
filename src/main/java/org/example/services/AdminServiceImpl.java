@@ -6,7 +6,6 @@ import org.example.models.DTO.*;
 import org.example.models.forms.*;
 import org.example.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,8 +17,6 @@ import java.util.stream.Collectors;
 @Transactional
 public class AdminServiceImpl implements AdminService{
 
-//    @Autowired
-//    private PasswordEncoder passwordEncoder;
     @Autowired
     private CourseRepository courseRepository;
     @Autowired
@@ -131,10 +128,6 @@ public class AdminServiceImpl implements AdminService{
         return initializeGroupDTOs(grooups);
     }
 
-
-
-
-
     @Override
     public boolean create_updateLecturer(AddFormLecturer form){
         String login = (form.getLogin() == null) ? generateLogin() : form.getLogin();
@@ -147,7 +140,6 @@ public class AdminServiceImpl implements AdminService{
         if (!role.isPresent()) {
             return false;
         }
-
         Lecturer lecturer = new Lecturer();
         Users user;
         if(form.getId() != null){
@@ -397,10 +389,6 @@ public class AdminServiceImpl implements AdminService{
         }
         return studentDTOs;
     }
-
-
-
-
 
     private String generatePassword (){
         int lenght = 7;

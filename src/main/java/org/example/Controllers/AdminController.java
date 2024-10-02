@@ -3,17 +3,13 @@ package org.example.Controllers;
 import org.example.models.DTO.GroupDTO;
 import org.example.models.DTO.LecturerDTO;
 import org.example.models.DTO.StudentDTO;
-import org.example.models.Grooup;
 import org.example.models.forms.*;
 import org.example.services.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-import java.util.Optional;
 
 
 @RestController
@@ -52,13 +48,6 @@ public class AdminController {
         List<GroupDTO> groupDTOList = adminService.getGrooupsByName(name);
         return ResponseEntity.ok(groupDTOList);
     }
-
-
-
-
-
-
-
 
     @GetMapping("/groups")
     public ResponseEntity<List<GroupDTO>> getAllGroups() {

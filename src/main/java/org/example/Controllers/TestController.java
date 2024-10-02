@@ -53,7 +53,8 @@ public class TestController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The test is not available");
         }
-    }    @GetMapping("/testsByCourse/{subjectId}")
+    }
+    @GetMapping("/testsByCourse/{subjectId}")
     public ResponseEntity<?> getTestsBySubjectId(@RequestParam Long studentId, @PathVariable Long subjectId) {
         List<TestDTO> tests = testService.getTestsBySubjectId(studentId, subjectId);
         if (tests == null){

@@ -59,22 +59,7 @@ public class TestServiceImpl implements TestService {
             return false;
         }
     }
-//    @Override
-//    public boolean updateTest(AddFormTest form){
-//        try {
-//            Test test = new Test();
-//            test.setId(form.getId());
-//            test.setName(form.getName());
-//            test.setDescription(form.getDescription());
-//            test.setOpen(form.isOpen());
-//            test.setSubject(courseRepository.findById(form.getSubjectId()).get());
-//            saveTest(test);
-//            return true;
-//        } catch (Exception e) {
-//            System.out.println(e);
-//            return false;
-//        }
-//    }
+
     @Override
     public boolean deleteTest(Long id){
         try {
@@ -173,8 +158,6 @@ public class TestServiceImpl implements TestService {
             return false;
         }
     }
-
-
 
     private TestDTO initializeTestDTO(Long studentId, Test test) {
         TestDTO dto = new TestDTO();
