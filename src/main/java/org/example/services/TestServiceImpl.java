@@ -1,6 +1,7 @@
 package org.example.services;
 
 import org.example.models.*;
+import org.example.models.DTO.MarkDTO;
 import org.example.models.DTO.QuestionDTO;
 import org.example.models.DTO.TestDTO;
 import org.example.models.DTO.TestOpenDTO;
@@ -90,6 +91,12 @@ public class TestServiceImpl implements TestService {
         List<Test> tests = testRepository.findAll();
         return initializeTestDTOs(studentId, tests);
     }
+    @Override
+    public List<MarkDTO> getAllMarks(Long testId){
+        return initializeMarkDTOs(testId);
+    }
+
+
     @Override
     public TestOpenDTO getOpenTestById(Long id){
         TestOpenDTO test = initializeTestOpenDTO(testRepository.findById(id).get());
@@ -196,11 +203,25 @@ public class TestServiceImpl implements TestService {
         return dto;
     }
 
-    private List<TestOpenDTO> initializeTestOpenDTOs(List<Test> tests) {
-        List<TestOpenDTO> testOpenDTOs = new ArrayList<>();
-        for (Test test : tests) {
-            testOpenDTOs.add(initializeTestOpenDTO(test));
+    private List<MarkDTO> initializeMarkDTOs(Long id) {
+        List<ResultTest> listResultTest = resultTestRepository.findByTestId(id);
+
+        List<MarkDTO> markDTOs = new ArrayList<>();
+        for (ResultTest resultTest : listResultTest) {
+            markDTOs.add(initializeMarkDTO(resultTest));
         }
-        return testOpenDTOs;
+        return markDTOs;
+    }
+
+    private MarkDTO initializeMarkDTO(ResultTest resultTest) {
+        MarkDTO dto = new MarkDTO();
+        Optional<Student> optionalStudent = studentRepository.findById(resultTest.getStudent().getId());
+        Student student = optionalStudent.get();
+        dto.setId(student.getId());
+        dto.setName(student.getName());
+        dto.setSurname(student.getSurname());
+        dto.setGroup(student.getGroup().getName());
+        dto.setMark(resultTest.getMark());
+        return dto;
     }
 }

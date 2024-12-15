@@ -13,6 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Transactional
 @Service
 public class UserService {
@@ -37,6 +39,21 @@ public class UserService {
     }
 
 
+    public UserDTO findByLoginAndPassword(String login, String password) {
+        try {
+            Optional<Users> user = userRepository.findByLoginAndPassword(login, password);
+            System.out.println(user);
+            if (user.isEmpty()){return null;}
+            else{ return initializeUsersDTO(user.get());}
+
+        }
+        catch (Exception e){
+            System.out.println(e);
+            return null;
+        }
+
+    }
+
     public UserDTO findByLogin(String login) {
         try {
             return initializeUsersDTO(userRepository.findByLogin(login));
@@ -46,7 +63,6 @@ public class UserService {
             return null;
         }
     }
-
 
     private UserDTO initializeUsersDTO(Users user) {
         UserDTO dto = new UserDTO();

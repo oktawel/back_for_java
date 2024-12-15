@@ -1,5 +1,6 @@
 package org.example.services;
 
+import org.example.models.DTO.MarkDTO;
 import org.example.models.DTO.TestDTO;
 import org.example.models.DTO.TestOpenDTO;
 import org.example.models.forms.AddFormAnswerTest;
@@ -13,6 +14,7 @@ public interface TestService {
     boolean deleteTest(Long id);
     TestDTO getTestById(Long studentId, Long id);
     List<TestDTO> getAllTests(Long studentId);
+    List<MarkDTO> getAllMarks(Long testId);
     List<TestDTO> getTestsBySubjectId(Long studentId, Long subjectId);
     TestOpenDTO getOpenTestById(Long id);
     boolean addAnswer(AddFormAnswerTest test);

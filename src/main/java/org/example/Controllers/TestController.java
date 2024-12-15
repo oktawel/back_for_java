@@ -1,6 +1,7 @@
 package org.example.Controllers;
 
 import org.example.models.DTO.CourseDTO;
+import org.example.models.DTO.MarkDTO;
 import org.example.models.DTO.TestDTO;
 import org.example.models.DTO.TestOpenDTO;
 import org.example.models.forms.AddFormAnswerQuestion;
@@ -35,6 +36,17 @@ public class TestController {
         }
     }
 
+    @GetMapping("/testsResults")
+    public ResponseEntity<?> getAllTestsResults(@RequestParam Long testId) {
+        List<MarkDTO> tests = testService.getAllMarks(testId);
+        if (tests == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Marks not found");
+        }
+        else{
+            return ResponseEntity.ok(tests);
+        }
+    }
+
     @GetMapping("/test/{id}")
     public ResponseEntity<?> getTestById(@RequestParam Long studentId, @PathVariable Long id) {
         TestDTO test = testService.getTestById(studentId, id);
@@ -63,7 +75,6 @@ public class TestController {
         else{
             return ResponseEntity.ok(tests);
         }
-
     }
 
     @PostMapping(value = "/test/add", consumes = MediaType.APPLICATION_JSON_VALUE)

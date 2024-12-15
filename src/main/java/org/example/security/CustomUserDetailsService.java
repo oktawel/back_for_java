@@ -66,10 +66,24 @@ public class CustomUserDetailsService implements UserDetailsService {
             return null;
         }
     }
-
     @Override
     public CustomUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserDTO userDTO = userService.findByLogin(username);
+        if (userDTO == null) {
+            throw new UsernameNotFoundException("User not found");
+        }
+        Users user = new Users();
+        user.setLogin(userDTO.getUserLogin());
+        user.setPassword("{noop}" + userDTO.getUserPassword());
+        user.setRole(roleRepository.findByName(userDTO.getRoleName()));
+        user.setId(userDTO.getId());
+
+        return new CustomUserDetails(user);
+
+    }
+
+    public CustomUserDetails loadUserByUsernameAndPassword(String username, String password) throws UsernameNotFoundException {
+        UserDTO userDTO = userService.findByLoginAndPassword(username, password);
         if (userDTO == null) {
             throw new UsernameNotFoundException("User not found");
         }
